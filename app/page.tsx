@@ -6,13 +6,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Camera, Upload, Zap, BookOpen, History, BarChart3, User, Bell, CheckCircle, AlertCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs"
 
 export default function HomePage() {
   const [dragActive, setDragActive] = useState(false)
   const [uploadStatus, setUploadStatus] = useState<"idle" | "uploading" | "success" | "error">("idle")
   const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
+  const { user, isLoaded } = useUser()
+
+  console.log("[v0] Clerk状态:", { user, isLoaded, isSignedIn: !!user })
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
@@ -105,6 +108,17 @@ export default function HomePage() {
     return null
   }
 
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">正在加载...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-background pb-20">
       <StatusIndicator />
@@ -141,6 +155,12 @@ export default function HomePage() {
         </div>
       </header>
 
+      {process.env.NODE_ENV === "development" && (
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 text-sm">
+          调试信息: isLoaded={isLoaded.toString()}, user={user ? "已登录" : "未登录"}
+        </div>
+      )}
+
       {/* Main Content */}
       <main className="px-4 py-6">
         <SignedOut>
@@ -155,14 +175,26 @@ export default function HomePage() {
               </p>
             </div>
 
-            <SignInButton mode="modal">
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-base font-medium elevation-2 transition-elevation hover:elevation-3"
-              >
-                开始使用
-              </Button>
-            </SignInButton>
+            <div className="space-y-4">
+              <SignInButton mode="modal">
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-base font-medium elevation-2 transition-elevation hover:elevation-3"
+                >
+                  开始使用
+                </Button>
+              </SignInButton>
+
+              <SignInButton mode="redirect" redirectUrl="/">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-2 border-primary text-primary hover:bg-primary/5 px-8 py-3 text-base font-medium bg-transparent"
+                >
+                  直接跳转登录
+                </Button>
+              </SignInButton>
+            </div>
           </div>
         </SignedOut>
 
