@@ -4,7 +4,21 @@ import type React from "react"
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Camera, Upload, Zap, BookOpen, History, BarChart3, User, Bell, CheckCircle, AlertCircle } from "lucide-react"
+import {
+  Camera,
+  Upload,
+  Zap,
+  BookOpen,
+  History,
+  BarChart3,
+  User,
+  Bell,
+  CheckCircle,
+  AlertCircle,
+  Sparkles,
+  Target,
+  TrendingUp,
+} from "lucide-react"
 import { useRouter } from "next/navigation"
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs"
 
@@ -14,8 +28,6 @@ export default function HomePage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
   const { user, isLoaded } = useUser()
-
-  console.log("[v0] Clerk状态:", { user, isLoaded, isSignedIn: !!user })
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
@@ -80,27 +92,27 @@ export default function HomePage() {
   const StatusIndicator = () => {
     if (uploadStatus === "uploading") {
       return (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-primary text-primary-foreground px-4 py-2 rounded-full shadow-lg elevation-2 flex items-center gap-2">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
-          <span className="text-sm font-medium">正在上传...</span>
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 gradient-primary text-primary-foreground px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
+          <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-foreground border-t-transparent"></div>
+          <span className="text-sm font-medium">AI正在识别中...</span>
         </div>
       )
     }
 
     if (uploadStatus === "success") {
       return (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white px-4 py-2 rounded-full shadow-lg elevation-2 flex items-center gap-2">
-          <CheckCircle className="h-4 w-4" />
-          <span className="text-sm font-medium">上传成功！</span>
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-emerald-500 text-white px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
+          <CheckCircle className="h-5 w-5" />
+          <span className="text-sm font-medium">识别成功！正在跳转...</span>
         </div>
       )
     }
 
     if (uploadStatus === "error") {
       return (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-destructive text-destructive-foreground px-4 py-2 rounded-full shadow-lg elevation-2 flex items-center gap-2">
-          <AlertCircle className="h-4 w-4" />
-          <span className="text-sm font-medium">上传失败，请重试</span>
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-destructive text-destructive-foreground px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
+          <AlertCircle className="h-5 w-5" />
+          <span className="text-sm font-medium">识别失败，请重试</span>
         </div>
       )
     }
@@ -112,8 +124,8 @@ export default function HomePage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">正在加载...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-3 border-primary border-t-transparent mx-auto mb-6"></div>
+          <p className="text-muted-foreground text-lg">正在加载应用...</p>
         </div>
       </div>
     )
@@ -123,31 +135,35 @@ export default function HomePage() {
     <div className="min-h-screen bg-background pb-20">
       <StatusIndicator />
 
-      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border elevation-1">
-        <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-primary/10 rounded-lg">
-              <BookOpen className="h-6 w-6 text-primary" />
+      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80 border-b border-border elevation-2">
+        <div className="flex items-center justify-between p-6">
+          <div className="flex items-center gap-4">
+            <div className="p-2 gradient-primary rounded-xl elevation-1">
+              <BookOpen className="h-7 w-7 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-primary">GapDrill</h1>
-              <p className="text-xs text-muted-foreground">智能错题本</p>
+              <h1 className="text-2xl font-bold text-primary">GapDrill</h1>
+              <p className="text-sm text-muted-foreground font-medium">AI智能错题本</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <SignedOut>
               <SignInButton mode="modal">
-                <Button variant="outline" size="sm" className="text-sm bg-transparent">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-sm border-2 border-primary text-primary hover:bg-primary/5 font-medium bg-transparent"
+                >
                   登录
                 </Button>
               </SignInButton>
             </SignedOut>
 
             <SignedIn>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full"></span>
+              <Button variant="ghost" size="icon" className="relative hover:bg-primary/10">
+                <Bell className="h-5 w-5 text-muted-foreground" />
+                <span className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full border-2 border-background"></span>
               </Button>
               <UserButton afterSignOutUrl="/" />
             </SignedIn>
@@ -155,33 +171,29 @@ export default function HomePage() {
         </div>
       </header>
 
-      {process.env.NODE_ENV === "development" && (
-        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 text-sm">
-          调试信息: isLoaded={isLoaded.toString()}, user={user ? "已登录" : "未登录"}
-        </div>
-      )}
-
-      {/* Main Content */}
-      <main className="px-4 py-6">
+      <main className="px-6 py-8">
         <SignedOut>
-          <div className="text-center mb-8 px-4">
-            <div className="mb-6">
-              <div className="inline-flex p-4 bg-primary/10 rounded-full mb-4">
-                <BookOpen className="h-12 w-12 text-primary" />
+          <div className="text-center mb-12 px-4">
+            <div className="mb-8">
+              <div className="inline-flex p-6 gradient-primary rounded-2xl mb-6 elevation-2">
+                <Sparkles className="h-16 w-16 text-white" />
               </div>
-              <h2 className="text-3xl font-bold text-foreground mb-3 text-balance">欢迎使用 GapDrill</h2>
-              <p className="text-muted-foreground text-lg text-pretty max-w-md mx-auto leading-relaxed">
-                AI驱动的智能错题管理系统，让学习更高效
+              <h2 className="text-4xl font-bold text-foreground mb-4 text-balance">欢迎使用 GapDrill</h2>
+              <p className="text-muted-foreground text-xl text-pretty max-w-lg mx-auto leading-relaxed">
+                AI驱动的智能错题管理系统
+                <br />
+                让学习更高效，进步更明显
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 max-w-sm mx-auto">
               <SignInButton mode="modal">
                 <Button
                   size="lg"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-base font-medium elevation-2 transition-elevation hover:elevation-3"
+                  className="w-full gradient-primary hover:opacity-90 text-primary-foreground px-8 py-4 text-lg font-semibold elevation-2 transition-elevation hover:elevation-3 rounded-xl"
                 >
-                  开始使用
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  开始智能学习
                 </Button>
               </SignInButton>
 
@@ -189,9 +201,9 @@ export default function HomePage() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-2 border-primary text-primary hover:bg-primary/5 px-8 py-3 text-base font-medium bg-transparent"
+                  className="w-full border-2 border-primary text-primary hover:bg-primary/5 px-8 py-4 text-lg font-medium rounded-xl transition-all duration-200 bg-transparent"
                 >
-                  直接跳转登录
+                  快速登录
                 </Button>
               </SignInButton>
             </div>
@@ -199,42 +211,46 @@ export default function HomePage() {
         </SignedOut>
 
         <SignedIn>
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-foreground mb-2 text-balance">智能错题识别</h2>
-            <p className="text-muted-foreground text-base text-pretty">拍照上传错题，AI智能识别，让学习更高效</p>
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-foreground mb-3 text-balance">AI智能错题识别</h2>
+            <p className="text-muted-foreground text-lg text-pretty max-w-md mx-auto">
+              拍照上传错题，AI瞬间识别，学习效率翻倍
+            </p>
           </div>
 
-          <Card className="mb-8 bg-card border border-border elevation-1 transition-elevation hover:elevation-2 overflow-hidden">
+          <Card className="mb-10 gradient-card border-2 border-border elevation-2 transition-elevation hover:elevation-3 overflow-hidden rounded-2xl">
             <CardContent className="p-0">
               <div
-                className={`text-center p-8 transition-all duration-300 ${
-                  dragActive ? "bg-primary/5 border-primary/30" : ""
+                className={`text-center p-10 transition-all duration-300 ${
+                  dragActive ? "bg-primary/10 border-primary/30 scale-[1.02]" : ""
                 } ${uploadStatus === "uploading" ? "opacity-50 pointer-events-none" : ""}`}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
                 onDrop={handleDrop}
               >
-                <div className="flex justify-center mb-6">
-                  <div className="p-4 bg-primary/10 rounded-full">
-                    <Upload className="h-12 w-12 text-primary" />
+                <div className="flex justify-center mb-8">
+                  <div className="p-6 gradient-primary rounded-2xl elevation-2">
+                    <Upload className="h-16 w-16 text-white" />
                   </div>
                 </div>
 
-                <h3 className="text-xl font-semibold text-card-foreground mb-2">上传错题图片</h3>
-                <p className="text-muted-foreground mb-8 text-base max-w-md mx-auto">
-                  拖拽图片到此处，或点击下方按钮选择文件
+                <h3 className="text-2xl font-bold text-card-foreground mb-3">上传错题图片</h3>
+                <p className="text-muted-foreground mb-10 text-lg max-w-md mx-auto leading-relaxed">
+                  拖拽图片到此处，或点击下方按钮
+                  <br />
+                  支持手写和印刷体，识别准确率95%+
                 </p>
 
-                <div className="flex flex-col gap-4 max-w-sm mx-auto">
+                <div className="flex flex-col gap-4 max-w-xs mx-auto">
                   <Button
                     onClick={openCamera}
                     disabled={uploadStatus === "uploading"}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground h-12 text-base font-medium elevation-1 transition-elevation hover:elevation-2"
+                    className="gradient-primary hover:opacity-90 text-primary-foreground h-14 text-lg font-semibold elevation-2 transition-elevation hover:elevation-3 rounded-xl"
                     size="lg"
                   >
-                    <Camera className="mr-2 h-5 w-5" />
-                    {uploadStatus === "uploading" ? "处理中..." : "拍照上传"}
+                    <Camera className="mr-3 h-6 w-6" />
+                    {uploadStatus === "uploading" ? "AI识别中..." : "拍照识别"}
                   </Button>
 
                   <Button
@@ -242,9 +258,9 @@ export default function HomePage() {
                     disabled={uploadStatus === "uploading"}
                     variant="outline"
                     size="lg"
-                    className="border-2 border-primary text-primary hover:bg-primary/5 h-12 text-base font-medium transition-all duration-200"
+                    className="border-2 border-primary text-primary hover:bg-primary/5 h-14 text-lg font-medium transition-all duration-200 rounded-xl"
                   >
-                    <Upload className="mr-2 h-5 w-5" />
+                    <Upload className="mr-3 h-6 w-6" />
                     选择图片
                   </Button>
                 </div>
@@ -254,44 +270,44 @@ export default function HomePage() {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 gap-4 mb-8">
-            <Card className="p-6 elevation-1 transition-elevation hover:elevation-2 bg-card border border-border">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/10 rounded-full flex-shrink-0">
-                  <Zap className="h-6 w-6 text-primary" />
+          <div className="grid grid-cols-1 gap-6 mb-10">
+            <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-card border border-border rounded-2xl">
+              <div className="flex items-start gap-6">
+                <div className="p-4 bg-primary/10 rounded-2xl flex-shrink-0">
+                  <Zap className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">AI智能识别</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    自动识别图片中的文字和数学公式，准确率高达95%，支持手写和印刷体
+                  <h3 className="text-xl font-bold text-foreground mb-3">AI智能识别</h3>
+                  <p className="text-muted-foreground leading-relaxed text-base">
+                    先进的OCR技术结合深度学习，自动识别图片中的文字和数学公式，支持手写和印刷体，准确率高达95%以上
                   </p>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6 elevation-1 transition-elevation hover:elevation-2 bg-card border border-border">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-accent/10 rounded-full flex-shrink-0">
-                  <BookOpen className="h-6 w-6 text-accent" />
+            <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-card border border-border rounded-2xl">
+              <div className="flex items-start gap-6">
+                <div className="p-4 bg-accent/10 rounded-2xl flex-shrink-0">
+                  <Target className="h-8 w-8 text-accent" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">错题整理</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    自动分类整理错题，建立个人专属错题库，支持标签和搜索功能
+                  <h3 className="text-xl font-bold text-foreground mb-3">智能分类整理</h3>
+                  <p className="text-muted-foreground leading-relaxed text-base">
+                    自动按学科、难度、错误类型分类整理错题，建立个人专属错题库，支持智能标签和快速搜索功能
                   </p>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-6 elevation-1 transition-elevation hover:elevation-2 bg-card border border-border">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-chart-2/10 rounded-full flex-shrink-0">
-                  <BarChart3 className="h-6 w-6 text-chart-2" />
+            <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-card border border-border rounded-2xl">
+              <div className="flex items-start gap-6">
+                <div className="p-4 bg-chart-2/10 rounded-2xl flex-shrink-0">
+                  <TrendingUp className="h-8 w-8 text-chart-2" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">学习分析</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    智能分析学习薄弱点，提供个性化学习建议和复习计划
+                  <h3 className="text-xl font-bold text-foreground mb-3">学习分析报告</h3>
+                  <p className="text-muted-foreground leading-relaxed text-base">
+                    深度分析学习薄弱点和进步趋势，提供个性化学习建议和科学复习计划，让每次学习都更有针对性
                   </p>
                 </div>
               </div>
@@ -300,35 +316,38 @@ export default function HomePage() {
         </SignedIn>
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t border-border elevation-3 safe-area-pb">
-        <div className="flex justify-around items-center py-3 px-2">
-          <Button variant="ghost" className="flex flex-col items-center gap-1 text-primary min-w-0 px-3 py-2 h-auto">
-            <BookOpen className="h-5 w-5" />
-            <span className="text-xs font-medium">首页</span>
+      <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80 border-t border-border elevation-4 safe-area-pb">
+        <div className="flex justify-around items-center py-4 px-2">
+          <Button
+            variant="ghost"
+            className="flex flex-col items-center gap-2 text-primary min-w-0 px-4 py-3 h-auto rounded-xl"
+          >
+            <BookOpen className="h-6 w-6" />
+            <span className="text-xs font-semibold">首页</span>
           </Button>
 
           <Button
             variant="ghost"
-            className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground min-w-0 px-3 py-2 h-auto transition-colors"
+            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground min-w-0 px-4 py-3 h-auto transition-colors rounded-xl hover:bg-primary/5"
           >
-            <History className="h-5 w-5" />
-            <span className="text-xs">历史</span>
+            <History className="h-6 w-6" />
+            <span className="text-xs font-medium">历史</span>
           </Button>
 
           <Button
             variant="ghost"
-            className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground min-w-0 px-3 py-2 h-auto transition-colors"
+            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground min-w-0 px-4 py-3 h-auto transition-colors rounded-xl hover:bg-primary/5"
           >
-            <BarChart3 className="h-5 w-5" />
-            <span className="text-xs">分析</span>
+            <BarChart3 className="h-6 w-6" />
+            <span className="text-xs font-medium">分析</span>
           </Button>
 
           <Button
             variant="ghost"
-            className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground min-w-0 px-3 py-2 h-auto transition-colors"
+            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground min-w-0 px-4 py-3 h-auto transition-colors rounded-xl hover:bg-primary/5"
           >
-            <User className="h-5 w-5" />
-            <span className="text-xs">我的</span>
+            <User className="h-6 w-6" />
+            <span className="text-xs font-medium">我的</span>
           </Button>
         </div>
       </nav>

@@ -4,40 +4,40 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color tokens to match Material Design brief with orange primary theme */
-  --background: #ffffff; /* Main background for the app */
-  --foreground: #4b5563; /* Text color for body */
-  --card: #fffbeb; /* Background color for cards */
-  --card-foreground: #4b5563; /* Text color for card content */
-  --popover: #ffffff; /* Background for popover elements */
-  --popover-foreground: #4b5563; /* Text color for popover elements */
-  --primary: #ea580c; /* Call-to-action buttons */
-  --primary-foreground: #ffffff; /* Text color for buttons */
-  --secondary: #f97316; /* Additional accent elements */
-  --secondary-foreground: #ffffff; /* Text color for secondary elements */
-  --muted: #fef2f2; /* Muted background for less important elements */
-  --muted-foreground: #374151; /* Text color for muted elements */
-  --accent: #f97316; /* Accent for highlights */
-  --accent-foreground: #ffffff; /* Text color for accent elements */
-  --destructive: #dc2626; /* Color for error messages */
-  --destructive-foreground: #ffffff; /* Text color for error messages */
-  --border: #e5e7eb; /* Border color for card and input elements */
-  --input: #ffffff; /* Background for input fields */
-  --ring: rgba(234, 88, 12, 0.2); /* Ring color for focus states */
-  --chart-1: #ea580c; /* Chart color 1 */
-  --chart-2: #f97316; /* Chart color 2 */
-  --chart-3: #dc2626; /* Chart color 3 */
-  --chart-4: #6b7280; /* Chart color 4 */
-  --chart-5: #d1fae5; /* Chart color 5 */
-  --radius: 0.75rem; /* Increased corner rounding for more Material Design feel */
-  --sidebar: #ffffff; /* Background for sidebar */
-  --sidebar-foreground: #4b5563; /* Text color for sidebar */
-  --sidebar-primary: #ea580c; /* Primary color for sidebar elements */
-  --sidebar-primary-foreground: #ffffff; /* Text color for primary sidebar elements */
-  --sidebar-accent: #f97316; /* Accent color for sidebar */
-  --sidebar-accent-foreground: #ffffff; /* Text color for sidebar accent */
-  --sidebar-border: #e5e7eb; /* Border color for sidebar */
-  --sidebar-ring: rgba(234, 88, 12, 0.2); /* Ring color for sidebar focus */
+  /* Updated color tokens to match the beautiful emerald design brief */
+  --background: #ffffff; /* 背景色 */
+  --foreground: #475569; /* 主要文本色 */
+  --card: #f1f5f9; /* 卡片背景色 */
+  --card-foreground: #059669; /* 卡片文本色 */
+  --popover: #ffffff; /* 弹出层背景色 */
+  --popover-foreground: #475569; /* 弹出层文本色 */
+  --primary: #059669; /* 主色用于按钮 */
+  --primary-foreground: #ffffff; /* 主色按钮文本色 */
+  --secondary: #10b981; /* 强调色 */
+  --secondary-foreground: #ffffff; /* 强调色文本色 */
+  --muted: #f1f5f9; /* 静音背景色 */
+  --muted-foreground: #475569; /* 静音文本色 */
+  --accent: #10b981; /* 强调色用于链接 */
+  --accent-foreground: #ffffff; /* 强调色文本色 */
+  --destructive: #dc2626; /* 销毁操作颜色 */
+  --destructive-foreground: #ffffff; /* 销毁操作文本色 */
+  --border: #e2e8f0; /* 边框色 */
+  --input: #f1f5f9; /* 输入框背景色 */
+  --ring: rgba(5, 150, 105, 0.5); /* 聚焦边框色 */
+  --chart-1: #10b981; /* 图表色1 */
+  --chart-2: #059669; /* 图表色2 */
+  --chart-3: #6b7280; /* 图表色3 */
+  --chart-4: #d97706; /* 图表色4 */
+  --chart-5: #8b5cf6; /* 图表色5 */
+  --radius: 0.75rem; /* 圆角大小 */
+  --sidebar: #f1f5f9; /* 侧边栏背景色 */
+  --sidebar-foreground: #475569; /* 侧边栏文本色 */
+  --sidebar-primary: #059669; /* 侧边栏主色 */
+  --sidebar-primary-foreground: #ffffff; /* 侧边栏主色文本色 */
+  --sidebar-accent: #10b981; /* 侧边栏强调色 */
+  --sidebar-accent-foreground: #ffffff; /* 侧边栏强调色文本色 */
+  --sidebar-border: #e2e8f0; /* 侧边栏边框色 */
+  --sidebar-ring: rgba(5, 150, 105, 0.5); /* 侧边栏聚焦边框色 */
 }
 
 .dark {
@@ -124,21 +124,34 @@
     @apply bg-background text-foreground;
   }
 
-  /* Added Material Design elevation shadows */
+  /* Enhanced Material Design elevation shadows with better depth */
   .elevation-1 {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
   }
 
   .elevation-2 {
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
   }
 
   .elevation-3 {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 8px 16px rgba(5, 150, 105, 0.16), 0 4px 8px rgba(0, 0, 0, 0.12);
   }
 
-  /* Added smooth transitions for Material Design feel */
+  .elevation-4 {
+    box-shadow: 0 12px 24px rgba(5, 150, 105, 0.2), 0 6px 12px rgba(0, 0, 0, 0.16);
+  }
+
+  /* Smooth transitions for better user experience */
   .transition-elevation {
-    transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  /* Added gradient backgrounds for visual appeal */
+  .gradient-primary {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  }
+
+  .gradient-card {
+    background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%);
   }
 }
