@@ -4,39 +4,40 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0); /* #ffffff */
-  --foreground: oklch(0.556 0.014 252.37); /* #475569 */
-  --card: oklch(0.984 0.013 180.75); /* #ecfeff */
-  --card-foreground: oklch(0.314 0.048 200.12); /* #164e63 */
-  --popover: oklch(1 0 0); /* #ffffff */
-  --popover-foreground: oklch(0.556 0.014 252.37); /* #475569 */
-  --primary: oklch(0.314 0.048 200.12); /* #164e63 */
-  --primary-foreground: oklch(1 0 0); /* #ffffff */
-  --secondary: oklch(0.701 0.167 70.67); /* #f59e0b */
-  --secondary-foreground: oklch(1 0 0); /* #ffffff */
-  --muted: oklch(0.984 0.013 180.75); /* #ecfeff */
-  --muted-foreground: oklch(0.556 0.014 252.37); /* #475569 */
-  --accent: oklch(0.701 0.167 70.67); /* #f59e0b */
-  --accent-foreground: oklch(1 0 0); /* #ffffff */
-  --destructive: oklch(0.577 0.245 27.325); /* #dc2626 */
-  --destructive-foreground: oklch(1 0 0); /* #ffffff */
-  --border: oklch(0.922 0.013 252.89); /* #e2e8f0 */
-  --input: oklch(1 0 0); /* #ffffff */
-  --ring: oklch(0.701 0.167 70.67); /* #f59e0b */
-  --chart-1: oklch(0.314 0.048 200.12); /* #164e63 */
-  --chart-2: oklch(0.701 0.167 70.67); /* #f59e0b */
-  --chart-3: oklch(0.984 0.013 180.75); /* #ecfeff */
-  --chart-4: oklch(0.556 0.014 252.37); /* #475569 */
-  --chart-5: oklch(0.577 0.245 27.325); /* #dc2626 */
-  --radius: 0.5rem;
-  --sidebar: oklch(1 0 0); /* #ffffff */
-  --sidebar-foreground: oklch(0.556 0.014 252.37); /* #475569 */
-  --sidebar-primary: oklch(0.314 0.048 200.12); /* #164e63 */
-  --sidebar-primary-foreground: oklch(1 0 0); /* #ffffff */
-  --sidebar-accent: oklch(0.701 0.167 70.67); /* #f59e0b */
-  --sidebar-accent-foreground: oklch(1 0 0); /* #ffffff */
-  --sidebar-border: oklch(0.922 0.013 252.89); /* #e2e8f0 */
-  --sidebar-ring: oklch(0.701 0.167 70.67); /* #f59e0b */
+  /* Updated color tokens to match Material Design brief with orange primary theme */
+  --background: #ffffff; /* Main background for the app */
+  --foreground: #4b5563; /* Text color for body */
+  --card: #fffbeb; /* Background color for cards */
+  --card-foreground: #4b5563; /* Text color for card content */
+  --popover: #ffffff; /* Background for popover elements */
+  --popover-foreground: #4b5563; /* Text color for popover elements */
+  --primary: #ea580c; /* Call-to-action buttons */
+  --primary-foreground: #ffffff; /* Text color for buttons */
+  --secondary: #f97316; /* Additional accent elements */
+  --secondary-foreground: #ffffff; /* Text color for secondary elements */
+  --muted: #fef2f2; /* Muted background for less important elements */
+  --muted-foreground: #374151; /* Text color for muted elements */
+  --accent: #f97316; /* Accent for highlights */
+  --accent-foreground: #ffffff; /* Text color for accent elements */
+  --destructive: #dc2626; /* Color for error messages */
+  --destructive-foreground: #ffffff; /* Text color for error messages */
+  --border: #e5e7eb; /* Border color for card and input elements */
+  --input: #ffffff; /* Background for input fields */
+  --ring: rgba(234, 88, 12, 0.2); /* Ring color for focus states */
+  --chart-1: #ea580c; /* Chart color 1 */
+  --chart-2: #f97316; /* Chart color 2 */
+  --chart-3: #dc2626; /* Chart color 3 */
+  --chart-4: #6b7280; /* Chart color 4 */
+  --chart-5: #d1fae5; /* Chart color 5 */
+  --radius: 0.75rem; /* Increased corner rounding for more Material Design feel */
+  --sidebar: #ffffff; /* Background for sidebar */
+  --sidebar-foreground: #4b5563; /* Text color for sidebar */
+  --sidebar-primary: #ea580c; /* Primary color for sidebar elements */
+  --sidebar-primary-foreground: #ffffff; /* Text color for primary sidebar elements */
+  --sidebar-accent: #f97316; /* Accent color for sidebar */
+  --sidebar-accent-foreground: #ffffff; /* Text color for sidebar accent */
+  --sidebar-border: #e5e7eb; /* Border color for sidebar */
+  --sidebar-ring: rgba(234, 88, 12, 0.2); /* Ring color for sidebar focus */
 }
 
 .dark {
@@ -121,5 +122,23 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Added Material Design elevation shadows */
+  .elevation-1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  }
+
+  .elevation-2 {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  }
+
+  .elevation-3 {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  }
+
+  /* Added smooth transitions for Material Design feel */
+  .transition-elevation {
+    transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
 }
