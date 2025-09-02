@@ -148,8 +148,6 @@ export default function HomePage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <SignedOut></SignedOut>
-
             <SignedIn>
               <Button variant="ghost" size="icon" className="relative hover:bg-primary/10">
                 <Bell className="h-5 w-5 text-muted-foreground" />
