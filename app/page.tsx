@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -18,14 +18,9 @@ import {
   Sparkles,
   Target,
   TrendingUp,
-  Brain,
-  Award,
-  ArrowRight,
-  Play,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs"
-import { detectLanguage, getTranslations, type Translations } from "@/lib/i18n"
 
 export default function HomePage() {
   const [dragActive, setDragActive] = useState(false)
@@ -33,15 +28,6 @@ export default function HomePage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
   const { user, isLoaded } = useUser()
-
-  const [currentLang, setCurrentLang] = useState<"zh" | "en">("zh")
-  const [t, setT] = useState<Translations>(getTranslations("zh"))
-
-  useEffect(() => {
-    const detectedLang = detectLanguage()
-    setCurrentLang(detectedLang)
-    setT(getTranslations(detectedLang))
-  }, [])
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
@@ -108,7 +94,7 @@ export default function HomePage() {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 gradient-primary text-primary-foreground px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
           <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-foreground border-t-transparent"></div>
-          <span className="text-sm font-medium">{t.recognizing}</span>
+          <span className="text-sm font-medium">AI正在识别中...</span>
         </div>
       )
     }
@@ -117,7 +103,7 @@ export default function HomePage() {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-emerald-500 text-white px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
           <CheckCircle className="h-5 w-5" />
-          <span className="text-sm font-medium">{t.recognitionSuccess}</span>
+          <span className="text-sm font-medium">识别成功！正在跳转...</span>
         </div>
       )
     }
@@ -126,7 +112,7 @@ export default function HomePage() {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-destructive text-destructive-foreground px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
           <AlertCircle className="h-5 w-5" />
-          <span className="text-sm font-medium">{t.recognitionFailed}</span>
+          <span className="text-sm font-medium">识别失败，请重试</span>
         </div>
       )
     }
@@ -139,7 +125,7 @@ export default function HomePage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-3 border-primary border-t-transparent mx-auto mb-6"></div>
-          <p className="text-muted-foreground text-lg">{t.loadingApp}</p>
+          <p className="text-muted-foreground text-lg">正在加载应用...</p>
         </div>
       </div>
     )
@@ -156,8 +142,8 @@ export default function HomePage() {
               <BookOpen className="h-7 w-7 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-primary">{t.appName}</h1>
-              <p className="text-sm text-muted-foreground font-medium">{t.appSubtitle}</p>
+              <h1 className="text-2xl font-bold text-primary">GapDrill</h1>
+              <p className="text-sm text-muted-foreground font-medium">AI智能错题本</p>
             </div>
           </div>
 
@@ -175,141 +161,50 @@ export default function HomePage() {
 
       <main className="px-6 py-8">
         <SignedOut>
-          {/* Hero Section */}
-          <section className="text-center mb-16 px-4">
+          <div className="text-center mb-12 px-4">
             <div className="mb-8">
-              <div className="inline-flex p-8 gradient-primary rounded-3xl mb-8 elevation-3">
-                <Brain className="h-20 w-20 text-white" />
+              <div className="inline-flex p-6 gradient-primary rounded-2xl mb-6 elevation-2">
+                <Sparkles className="h-16 w-16 text-white" />
               </div>
-              <h1 className="text-5xl font-bold text-foreground mb-6 text-balance leading-tight">{t.heroTitle}</h1>
-              <p className="text-muted-foreground text-xl text-pretty max-w-2xl mx-auto leading-relaxed mb-8">
-                {t.heroSubtitle}
+              <h2 className="text-4xl font-bold text-foreground mb-4 text-balance">欢迎使用 GapDrill</h2>
+              <p className="text-muted-foreground text-xl text-pretty max-w-lg mx-auto leading-relaxed">
+                AI驱动的智能错题管理系统
+                <br />
+                让学习更高效，进步更明显
               </p>
-              <SignInButton mode="modal" forceRedirectUrl="/" signUpForceRedirectUrl="/">
-                <Button
-                  size="lg"
-                  className="gradient-primary hover:opacity-90 text-primary-foreground h-16 text-xl font-semibold elevation-3 transition-elevation hover:elevation-4 rounded-2xl px-12"
-                >
-                  <Play className="mr-3 h-7 w-7" />
-                  {t.getStarted}
-                  <ArrowRight className="ml-3 h-7 w-7" />
-                </Button>
-              </SignInButton>
             </div>
-          </section>
 
-          {/* Core Value Section */}
-          <section className="mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">{t.coreValueTitle}</h2>
-              <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">{t.coreValueDesc}</p>
-            </div>
-          </section>
-
-          {/* How It Works Section */}
-          <section className="mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">{t.howItWorksTitle}</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-feature border border-border rounded-2xl text-center">
-                <div className="p-6 bg-primary/10 rounded-3xl inline-flex mb-6">
-                  <Camera className="h-12 w-12 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">{t.step1Title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{t.step1Desc}</p>
-              </Card>
-
-              <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-feature border border-border rounded-2xl text-center">
-                <div className="p-6 bg-accent/10 rounded-3xl inline-flex mb-6">
-                  <Brain className="h-12 w-12 text-accent" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">{t.step2Title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{t.step2Desc}</p>
-              </Card>
-
-              <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-feature border border-border rounded-2xl text-center">
-                <div className="p-6 bg-chart-2/10 rounded-3xl inline-flex mb-6">
-                  <Target className="h-12 w-12 text-chart-2" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">{t.step3Title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{t.step3Desc}</p>
-              </Card>
-            </div>
-          </section>
-
-          {/* Why Choose Us Section */}
-          <section className="mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">{t.whyChooseTitle}</h2>
-            </div>
-            <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
-              <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-card border border-border rounded-2xl">
-                <div className="flex items-start gap-6">
-                  <div className="p-4 bg-primary/10 rounded-2xl flex-shrink-0">
-                    <Sparkles className="h-10 w-10 text-primary" />
+            <div className="max-w-sm mx-auto">
+              <Card className="p-8 elevation-2 gradient-card border border-border rounded-2xl">
+                <div className="text-center">
+                  <div className="p-4 bg-primary/10 rounded-2xl inline-flex mb-4">
+                    <User className="h-8 w-8 text-primary" />
                   </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-foreground mb-3">{t.aiPoweredTitle}</h3>
-                    <p className="text-muted-foreground leading-relaxed text-lg">{t.aiPoweredDesc}</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-card border border-border rounded-2xl">
-                <div className="flex items-start gap-6">
-                  <div className="p-4 bg-accent/10 rounded-2xl flex-shrink-0">
-                    <Target className="h-10 w-10 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-foreground mb-3">{t.targetedLearningTitle}</h3>
-                    <p className="text-muted-foreground leading-relaxed text-lg">{t.targetedLearningDesc}</p>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-card border border-border rounded-2xl">
-                <div className="flex items-start gap-6">
-                  <div className="p-4 bg-chart-2/10 rounded-2xl flex-shrink-0">
-                    <TrendingUp className="h-10 w-10 text-chart-2" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-foreground mb-3">{t.efficientPracticeTitle}</h3>
-                    <p className="text-muted-foreground leading-relaxed text-lg">{t.efficientPracticeDesc}</p>
-                  </div>
+                  <h3 className="text-xl font-bold text-foreground mb-3">开始使用</h3>
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                    请先登录账户，即可开始使用AI智能错题识别功能
+                  </p>
+                  <SignInButton mode="modal" forceRedirectUrl="/" signUpForceRedirectUrl="/">
+                    <Button
+                      size="lg"
+                      className="gradient-primary hover:opacity-90 text-primary-foreground h-14 text-lg font-semibold elevation-2 transition-elevation hover:elevation-3 rounded-xl w-full"
+                    >
+                      <User className="mr-3 h-6 w-6" />
+                      立即登录
+                    </Button>
+                  </SignInButton>
                 </div>
               </Card>
             </div>
-          </section>
-
-          {/* CTA Section */}
-          <section className="text-center mb-16">
-            <Card className="p-12 elevation-3 gradient-primary border-0 rounded-3xl max-w-2xl mx-auto">
-              <div className="text-center">
-                <div className="p-6 bg-white/20 rounded-3xl inline-flex mb-6">
-                  <Award className="h-16 w-16 text-white" />
-                </div>
-                <h3 className="text-3xl font-bold text-white mb-4">{t.getStarted}</h3>
-                <p className="text-white/90 mb-8 text-lg leading-relaxed">{t.pleaseLogin}</p>
-                <SignInButton mode="modal" forceRedirectUrl="/" signUpForceRedirectUrl="/">
-                  <Button
-                    size="lg"
-                    variant="secondary"
-                    className="bg-white text-primary hover:bg-white/90 h-14 text-lg font-semibold elevation-2 transition-elevation hover:elevation-3 rounded-xl px-10"
-                  >
-                    <User className="mr-3 h-6 w-6" />
-                    {t.loginNow}
-                  </Button>
-                </SignInButton>
-              </div>
-            </Card>
-          </section>
+          </div>
         </SignedOut>
 
         <SignedIn>
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-foreground mb-3 text-balance">{t.aiRecognitionTitle}</h2>
-            <p className="text-muted-foreground text-lg text-pretty max-w-md mx-auto">{t.aiRecognitionSubtitle}</p>
+            <h2 className="text-3xl font-bold text-foreground mb-3 text-balance">AI智能错题识别</h2>
+            <p className="text-muted-foreground text-lg text-pretty max-w-md mx-auto">
+              拍照上传错题，AI瞬间识别，学习效率翻倍
+            </p>
           </div>
 
           <Card className="mb-10 gradient-card border-2 border-border elevation-2 transition-elevation hover:elevation-3 overflow-hidden rounded-2xl">
@@ -329,14 +224,11 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <h3 className="text-2xl font-bold text-card-foreground mb-3">{t.uploadTitle}</h3>
+                <h3 className="text-2xl font-bold text-card-foreground mb-3">上传错题图片</h3>
                 <p className="text-muted-foreground mb-10 text-lg max-w-md mx-auto leading-relaxed">
-                  {t.uploadSubtitle.split("\n").map((line, index) => (
-                    <span key={index}>
-                      {line}
-                      {index < t.uploadSubtitle.split("\n").length - 1 && <br />}
-                    </span>
-                  ))}
+                  拖拽图片到此处，或点击下方按钮
+                  <br />
+                  支持手写和印刷体，识别准确率95%+
                 </p>
 
                 <div className="flex flex-col gap-4 max-w-xs mx-auto">
@@ -347,7 +239,7 @@ export default function HomePage() {
                     size="lg"
                   >
                     <Camera className="mr-3 h-6 w-6" />
-                    {uploadStatus === "uploading" ? t.aiProcessing : t.takePhoto}
+                    {uploadStatus === "uploading" ? "AI识别中..." : "拍照识别"}
                   </Button>
 
                   <Button
@@ -358,7 +250,7 @@ export default function HomePage() {
                     className="border-2 border-primary text-primary hover:bg-primary/5 h-14 text-lg font-medium transition-all duration-200 rounded-xl"
                   >
                     <Upload className="mr-3 h-6 w-6" />
-                    {t.selectImage}
+                    选择图片
                   </Button>
                 </div>
 
@@ -374,8 +266,10 @@ export default function HomePage() {
                   <Zap className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-foreground mb-3">{t.aiRecognitionFeature}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-base">{t.aiRecognitionDesc}</p>
+                  <h3 className="text-xl font-bold text-foreground mb-3">AI智能识别</h3>
+                  <p className="text-muted-foreground leading-relaxed text-base">
+                    先进的OCR技术结合深度学习，自动识别图片中的文字和数学公式，支持手写和印刷体，准确率高达95%以上
+                  </p>
                 </div>
               </div>
             </Card>
@@ -386,8 +280,10 @@ export default function HomePage() {
                   <Target className="h-8 w-8 text-accent" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-foreground mb-3">{t.smartCategoryFeature}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-base">{t.smartCategoryDesc}</p>
+                  <h3 className="text-xl font-bold text-foreground mb-3">智能分类整理</h3>
+                  <p className="text-muted-foreground leading-relaxed text-base">
+                    自动按学科、难度、错误类型分类整理错题，建立个人专属错题库，支持智能标签和快速搜索功能
+                  </p>
                 </div>
               </div>
             </Card>
@@ -398,8 +294,10 @@ export default function HomePage() {
                   <TrendingUp className="h-8 w-8 text-chart-2" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-foreground mb-3">{t.learningAnalysisFeature}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-base">{t.learningAnalysisDesc}</p>
+                  <h3 className="text-xl font-bold text-foreground mb-3">学习分析报告</h3>
+                  <p className="text-muted-foreground leading-relaxed text-base">
+                    深度分析学习薄弱点和进步趋势，提供个性化学习建议和科学复习计划，让每次学习都更有针对性
+                  </p>
                 </div>
               </div>
             </Card>
@@ -414,7 +312,7 @@ export default function HomePage() {
             className="flex flex-col items-center gap-2 text-primary min-w-0 px-4 py-3 h-auto rounded-xl"
           >
             <BookOpen className="h-6 w-6" />
-            <span className="text-xs font-semibold">{t.home}</span>
+            <span className="text-xs font-semibold">首页</span>
           </Button>
 
           <Button
@@ -422,7 +320,7 @@ export default function HomePage() {
             className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground min-w-0 px-4 py-3 h-auto transition-colors rounded-xl hover:bg-primary/5"
           >
             <History className="h-6 w-6" />
-            <span className="text-xs font-medium">{t.history}</span>
+            <span className="text-xs font-medium">历史</span>
           </Button>
 
           <Button
@@ -430,7 +328,7 @@ export default function HomePage() {
             className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground min-w-0 px-4 py-3 h-auto transition-colors rounded-xl hover:bg-primary/5"
           >
             <BarChart3 className="h-6 w-6" />
-            <span className="text-xs font-medium">{t.analysis}</span>
+            <span className="text-xs font-medium">分析</span>
           </Button>
 
           <Button
@@ -438,7 +336,7 @@ export default function HomePage() {
             className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground min-w-0 px-4 py-3 h-auto transition-colors rounded-xl hover:bg-primary/5"
           >
             <User className="h-6 w-6" />
-            <span className="text-xs font-medium">{t.profile}</span>
+            <span className="text-xs font-medium">我的</span>
           </Button>
         </div>
       </nav>
