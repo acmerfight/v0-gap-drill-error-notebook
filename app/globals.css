@@ -4,40 +4,40 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color tokens to match the beautiful emerald design brief */
-  --background: #ffffff; /* 背景色 */
-  --foreground: #475569; /* 主要文本色 */
-  --card: #f1f5f9; /* 卡片背景色 */
-  --card-foreground: #059669; /* 卡片文本色 */
-  --popover: #ffffff; /* 弹出层背景色 */
-  --popover-foreground: #475569; /* 弹出层文本色 */
-  --primary: #059669; /* 主色用于按钮 */
-  --primary-foreground: #ffffff; /* 主色按钮文本色 */
-  --secondary: #10b981; /* 强调色 */
-  --secondary-foreground: #ffffff; /* 强调色文本色 */
-  --muted: #f1f5f9; /* 静音背景色 */
-  --muted-foreground: #475569; /* 静音文本色 */
-  --accent: #10b981; /* 强调色用于链接 */
-  --accent-foreground: #ffffff; /* 强调色文本色 */
-  --destructive: #dc2626; /* 销毁操作颜色 */
-  --destructive-foreground: #ffffff; /* 销毁操作文本色 */
-  --border: #e2e8f0; /* 边框色 */
-  --input: #f1f5f9; /* 输入框背景色 */
-  --ring: rgba(5, 150, 105, 0.5); /* 聚焦边框色 */
-  --chart-1: #10b981; /* 图表色1 */
-  --chart-2: #059669; /* 图表色2 */
-  --chart-3: #6b7280; /* 图表色3 */
-  --chart-4: #d97706; /* 图表色4 */
-  --chart-5: #8b5cf6; /* 图表色5 */
-  --radius: 0.75rem; /* 圆角大小 */
-  --sidebar: #f1f5f9; /* 侧边栏背景色 */
-  --sidebar-foreground: #475569; /* 侧边栏文本色 */
-  --sidebar-primary: #059669; /* 侧边栏主色 */
-  --sidebar-primary-foreground: #ffffff; /* 侧边栏主色文本色 */
-  --sidebar-accent: #10b981; /* 侧边栏强调色 */
-  --sidebar-accent-foreground: #ffffff; /* 侧边栏强调色文本色 */
-  --sidebar-border: #e2e8f0; /* 侧边栏边框色 */
-  --sidebar-ring: rgba(5, 150, 105, 0.5); /* 侧边栏聚焦边框色 */
+  /* Updated color tokens to match cyan-based design brief */
+  --background: #ffffff;
+  --foreground: #374151;
+  --card: #f9fafb;
+  --card-foreground: #4b5563;
+  --popover: #ffffff;
+  --popover-foreground: #374151;
+  --primary: #0891b2; /* Cyan-600 as primary */
+  --primary-foreground: #ffffff;
+  --secondary: #84cc16; /* Lime green as secondary */
+  --secondary-foreground: #ffffff;
+  --muted: #f9fafb;
+  --muted-foreground: #4b5563;
+  --accent: #84cc16;
+  --accent-foreground: #374151;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e5e7eb;
+  --input: #f9fafb;
+  --ring: #60a5fa;
+  --chart-1: #6366f1;
+  --chart-2: #fbbf24;
+  --chart-3: #22c55e;
+  --chart-4: #f43f5e;
+  --chart-5: #3b82f6;
+  --radius: 0.5rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #374151;
+  --sidebar-primary: #f9fafb;
+  --sidebar-primary-foreground: #374151;
+  --sidebar-accent: #84cc16;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #60a5fa;
 }
 
 .dark {
@@ -126,19 +126,19 @@
 
   /* Enhanced Material Design elevation shadows with better depth */
   .elevation-1 {
-    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 4px rgba(8, 145, 178, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
   }
 
   .elevation-2 {
-    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 8px rgba(8, 145, 178, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
   }
 
   .elevation-3 {
-    box-shadow: 0 8px 16px rgba(5, 150, 105, 0.16), 0 4px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 16px rgba(8, 145, 178, 0.16), 0 4px 8px rgba(0, 0, 0, 0.12);
   }
 
   .elevation-4 {
-    box-shadow: 0 12px 24px rgba(5, 150, 105, 0.2), 0 6px 12px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 12px 24px rgba(8, 145, 178, 0.2), 0 6px 12px rgba(0, 0, 0, 0.16);
   }
 
   /* Smooth transitions for better user experience */
@@ -146,12 +146,21 @@
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
 
-  /* Added gradient backgrounds for visual appeal */
+  /* Updated gradient backgrounds to match new cyan color scheme */
   .gradient-primary {
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    background: linear-gradient(135deg, #0891b2 0%, #84cc16 100%);
   }
 
   .gradient-card {
-    background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%);
+    background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+  }
+
+  .gradient-hero {
+    background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #f0f9ff 100%);
+  }
+
+  /* Added new gradient for feature sections */
+  .gradient-feature {
+    background: linear-gradient(135deg, #ecfeff 0%, #f0f9ff 100%);
   }
 }

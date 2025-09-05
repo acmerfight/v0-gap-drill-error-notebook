@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Edit3, Check, X, Save, BookOpen, Eye, FileText, CheckCircle, AlertTriangle } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { detectLanguage, getTranslations, type Translations } from "@/lib/i18n"
 
 interface RecognitionData {
   question: string
@@ -78,7 +79,14 @@ export default function RecognitionResultPage() {
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "success" | "error">("idle")
   const router = useRouter()
 
+  const [currentLang, setCurrentLang] = useState<"zh" | "en">("zh")
+  const [t, setT] = useState<Translations>(getTranslations("zh"))
+
   useEffect(() => {
+    const detectedLang = detectLanguage()
+    setCurrentLang(detectedLang)
+    setT(getTranslations(detectedLang))
+
     // 从 sessionStorage 获取上传的图片
     const uploadedImage = sessionStorage.getItem("uploadedImage")
     if (uploadedImage) {
@@ -166,7 +174,7 @@ export default function RecognitionResultPage() {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-primary text-primary-foreground px-4 py-2 rounded-full shadow-lg elevation-2 flex items-center gap-2">
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
-          <span className="text-sm font-medium">正在保存...</span>
+          <span className="text-sm font-medium">{t.saving}</span>
         </div>
       )
     }
@@ -175,7 +183,7 @@ export default function RecognitionResultPage() {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white px-4 py-2 rounded-full shadow-lg elevation-2 flex items-center gap-2">
           <CheckCircle className="h-4 w-4" />
-          <span className="text-sm font-medium">保存成功！</span>
+          <span className="text-sm font-medium">{t.saveSuccess}</span>
         </div>
       )
     }
@@ -192,8 +200,8 @@ export default function RecognitionResultPage() {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </div>
           </div>
-          <h2 className="text-xl font-semibold text-foreground mb-2">AI正在识别中</h2>
-          <p className="text-muted-foreground">请稍候，正在分析您的错题图片...</p>
+          <h2 className="text-xl font-semibold text-foreground mb-2">{t.aiRecognizing}</h2>
+          <p className="text-muted-foreground">{t.pleaseWait}</p>
           <div className="mt-4 w-full bg-muted rounded-full h-2">
             <div className="bg-primary h-2 rounded-full animate-pulse" style={{ width: "60%" }}></div>
           </div>
@@ -216,7 +224,7 @@ export default function RecognitionResultPage() {
               <div className="p-1.5 bg-primary/10 rounded-lg">
                 <BookOpen className="h-5 w-5 text-primary" />
               </div>
-              <h1 className="text-lg font-bold text-primary">识别结果</h1>
+              <h1 className="text-lg font-bold text-primary">{t.recognitionResult}</h1>
             </div>
           </div>
           <Button
@@ -225,7 +233,7 @@ export default function RecognitionResultPage() {
             className="bg-primary hover:bg-primary/90 text-sm px-4 elevation-1 transition-elevation hover:elevation-2"
           >
             <Save className="mr-2 h-4 w-4" />
-            {saveStatus === "saving" ? "保存中..." : "保存到错题库"}
+            {saveStatus === "saving" ? t.saving : t.saveToLibrary}
           </Button>
         </div>
       </header>
@@ -239,7 +247,7 @@ export default function RecognitionResultPage() {
                 <div className="p-1.5 bg-primary/10 rounded">
                   <FileText className="h-4 w-4 text-primary" />
                 </div>
-                原图
+                {t.originalImage}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
@@ -260,7 +268,7 @@ export default function RecognitionResultPage() {
                   <div className="p-1.5 bg-accent/10 rounded">
                     <FileText className="h-4 w-4 text-accent" />
                   </div>
-                  题目内容
+                  {t.questionContent}
                 </CardTitle>
                 <div className="flex gap-2">
                   {editingQuestion ? (
@@ -272,7 +280,7 @@ export default function RecognitionResultPage() {
                         className="text-sm bg-transparent border-border hover:bg-muted/50"
                       >
                         <Eye className="h-4 w-4 mr-1" />
-                        {previewQuestion ? "编辑" : "预览"}
+                        {previewQuestion ? t.edit : t.preview}
                       </Button>
                       <Button size="sm" onClick={saveQuestion} className="h-9 px-3 elevation-1">
                         <Check className="h-4 w-4" />
@@ -294,7 +302,7 @@ export default function RecognitionResultPage() {
                       className="text-sm bg-transparent border-border hover:bg-muted/50"
                     >
                       <Edit3 className="h-4 w-4 mr-1" />
-                      编辑
+                      {t.edit}
                     </Button>
                   )}
                 </div>
@@ -306,12 +314,9 @@ export default function RecognitionResultPage() {
                   <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg border border-border">
                     <div className="flex items-center gap-2 mb-1">
                       <AlertTriangle className="h-3 w-3" />
-                      <span className="font-medium">Markdown语法支持</span>
+                      <span className="font-medium">{t.markdownSupport}</span>
                     </div>
-                    <p>
-                      **粗体**、*斜体*、`代码`、数学公式 $x^2$ 或 $$\frac{1}
-                      {2}$$
-                    </p>
+                    <p>{t.markdownSyntax}</p>
                   </div>
                   {previewQuestion ? (
                     <div className="p-4 bg-muted/30 rounded-lg border border-border min-h-[120px] elevation-1">
@@ -341,7 +346,7 @@ export default function RecognitionResultPage() {
                   <div className="p-1.5 bg-chart-2/10 rounded">
                     <FileText className="h-4 w-4 text-chart-2" />
                   </div>
-                  解题过程
+                  {t.solutionProcess}
                 </CardTitle>
                 <div className="flex gap-2">
                   {editingSolution ? (
@@ -353,7 +358,7 @@ export default function RecognitionResultPage() {
                         className="text-sm bg-transparent border-border hover:bg-muted/50"
                       >
                         <Eye className="h-4 w-4 mr-1" />
-                        {previewSolution ? "编辑" : "预览"}
+                        {previewSolution ? t.edit : t.preview}
                       </Button>
                       <Button size="sm" onClick={saveSolution} className="h-9 px-3 elevation-1">
                         <Check className="h-4 w-4" />
@@ -375,7 +380,7 @@ export default function RecognitionResultPage() {
                       className="text-sm bg-transparent border-border hover:bg-muted/50"
                     >
                       <Edit3 className="h-4 w-4 mr-1" />
-                      编辑
+                      {t.edit}
                     </Button>
                   )}
                 </div>
@@ -387,12 +392,9 @@ export default function RecognitionResultPage() {
                   <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg border border-border">
                     <div className="flex items-center gap-2 mb-1">
                       <AlertTriangle className="h-3 w-3" />
-                      <span className="font-medium">Markdown语法支持</span>
+                      <span className="font-medium">{t.markdownSupport}</span>
                     </div>
-                    <p>
-                      **粗体**、*斜体*、`代码`、### 标题、数学公式 $x^2$ 或 $$\frac{1}
-                      {2}$$
-                    </p>
+                    <p>{t.markdownSyntax}</p>
                   </div>
                   {previewSolution ? (
                     <div className="p-4 bg-accent/5 rounded-lg border border-border min-h-[150px] elevation-1">
@@ -412,7 +414,7 @@ export default function RecognitionResultPage() {
                   {recognitionData.userSolution ? (
                     <MathJaxRenderer content={recognitionData.userSolution} />
                   ) : (
-                    <p className="text-muted-foreground italic text-sm">未识别到解题过程</p>
+                    <p className="text-muted-foreground italic text-sm">{t.noSolutionFound}</p>
                   )}
                 </div>
               )}
@@ -426,10 +428,8 @@ export default function RecognitionResultPage() {
                   <CheckCircle className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground mb-2">确认识别结果</h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    支持Markdown语法和MathJax数学公式渲染。请仔细检查AI识别的内容是否正确，如有错误可点击"编辑"按钮修改。确认无误后点击"保存到错题库"。
-                  </p>
+                  <h4 className="font-semibold text-foreground mb-2">{t.confirmResult}</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t.confirmResultDesc}</p>
                 </div>
               </div>
             </CardContent>
