@@ -27,8 +27,8 @@ export default function RootLayout({
               __html: `
                 window.MathJax = {
                   tex: {
-                    inlineMath: [['$', '$'], ['\\\$$', '\\\$$']],
-                    displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
+                    inlineMath: [['$', '$']],
+                    displayMath: [['$$', '$$']],
                     processEscapes: true,
                     processEnvironments: true
                   },
@@ -36,11 +36,18 @@ export default function RootLayout({
                     skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
                     ignoreHtmlClass: 'tex2jax_ignore',
                     processHtmlClass: 'tex2jax_process'
+                  },
+                  startup: {
+                    ready: () => {
+                      MathJax.startup.defaultReady();
+                    }
                   }
                 };
               `,
             }}
           />
+          <script async src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+          <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         </head>
         <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
           <Suspense fallback={null}>{children}</Suspense>
