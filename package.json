@@ -5,8 +5,18 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "start": "next start",
     "lint": "next lint",
-    "start": "next start"
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
+    "ci": "npm run ci:check",
+    "ci:check": "npm run lint && echo '✅ Lint passed' && npm run type-check && echo '✅ Type check passed' && npm run build && echo '✅ Build completed'",
+    "audit:fix": "npm audit fix",
+    "outdated": "npm outdated",
+    "clean": "npx rimraf .next node_modules/.cache",
+    "clean:deps": "npx rimraf node_modules package-lock.json && npm install",
+    "health": "npm run type-check && npm run lint && echo '✅ Project health OK'"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -57,7 +67,7 @@
     "react": "^19",
     "react-day-picker": "9.9.0",
     "react-dom": "^19",
-    "tailwind-merge": "^2.5.5",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {

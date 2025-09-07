@@ -1,0 +1,48 @@
+name: 🔒 PR Quality Gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  pr-validation:
+    name: 🔍 PR Validation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    
+    steps:
+      - name: 📥 Checkout PR
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 📊 Check PR size
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          # 安全的分支名称验证
+          if [[ ! "$BASE_REF" =~ ^[a-zA-Z0-9/_.-]+$ ]]; then
+            echo "❌ Invalid base branch name"
+            exit 1
+          fi
+          
+          CHANGED_FILES=$(git diff --name-only "origin/$BASE_REF"...HEAD 2>/dev/null | wc -l || echo "0")
+          echo "Changed files: $CHANGED_FILES"
+          if [ "$CHANGED_FILES" -gt 50 ]; then
+            echo "⚠️ PR too large ($CHANGED_FILES files). Consider splitting."
+            exit 1
+          fi
+          
+      - name: 🔍 Check for secrets
+        uses: trufflesecurity/trufflehog@v3.86.1
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified

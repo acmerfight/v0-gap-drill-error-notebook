@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Edit3, Check, X, Save, BookOpen, Eye, FileText, CheckCircle, AlertTriangle } from "lucide-react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { detectLanguage, getTranslations, type Translations } from "@/lib/i18n"
 
@@ -16,7 +17,13 @@ function MathJaxRenderer({ content }: { content: string }) {
   useEffect(() => {
     // 重新渲染MathJax
     if (typeof window !== "undefined" && window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise().catch((err: any) => console.error("MathJax rendering error:", err))
+      window.MathJax.typesetPromise().catch((err: any) => {
+        // Log MathJax rendering errors in development only
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.error("MathJax rendering error:", err)
+        }
+      })
     }
   }, [content])
 
@@ -131,7 +138,11 @@ export default function RecognitionResultPage() {
 
     // 模拟保存过程
     setTimeout(() => {
-      console.log("保存到错题库:", recognitionData)
+      // Save to error collection - logged in development only
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.log("保存到错题库:", recognitionData)
+      }
       setSaveStatus("success")
 
       setTimeout(() => {
@@ -224,10 +235,13 @@ export default function RecognitionResultPage() {
             </CardHeader>
             <CardContent className="pt-0">
               <div className="flex justify-center p-4 bg-muted/30 rounded-lg">
-                <img
+                <Image
                   src={originalImage || "/placeholder.svg"}
                   alt="错题原图"
+                  width={800}
+                  height={600}
                   className="max-w-full h-auto rounded-lg border border-border max-h-80 object-contain elevation-1"
+                  style={{ maxHeight: '320px', width: 'auto' }}
                 />
               </div>
             </CardContent>
