@@ -19,8 +19,8 @@
     "health": "npm run type-check && npm run lint && echo '✅ Project health OK'"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.31.9",
