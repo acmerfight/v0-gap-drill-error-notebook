@@ -1,0 +1,33 @@
+name: 'Setup Node Environment'
+description: 'Reusable action to setup Node.js with caching'
+
+inputs:
+  node-version:
+    description: 'Node.js version to use'
+    required: false
+    default: '22'
+  cache-key:
+    description: 'Cache key for dependencies'
+    required: true
+
+outputs:
+  cache-hit:
+    description: 'Whether cache was hit'
+    value: ${{ steps.cache.outputs.cache-hit }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        
+    - name: 💾 Restore dependencies
+      uses: actions/cache@v4
+      id: cache
+      with:
+        path: node_modules
+        key: ${{ inputs.cache-key }}
+        fail-on-cache-miss: true
+      shell: bash

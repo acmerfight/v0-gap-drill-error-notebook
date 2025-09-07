@@ -9,54 +9,72 @@ on:
 env:
   NODE_VERSION: '22'
   NEXT_TELEMETRY_DISABLED: 1
+  VERCEL_PROJECT: 'v0-gap-drill-error-notebook'
+  VERCEL_VERSION: '47.0.5'
 
 jobs:
-  # 共享依赖安装
-  setup:
-    name: 📦 Setup Dependencies
+  # 共享环境和依赖设置
+  shared-setup:
+    name: 🚀 Shared Environment Setup
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 4
     permissions:
       contents: read
     outputs:
       cache-key: ${{ steps.cache-key.outputs.key }}
+      vercel-key: ${{ steps.cache-key.outputs.vercel-key }}
+      vercel-env-cache: ${{ steps.vercel-cache.outputs.cache-hit }}
     
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 🔑 Generate cache key
+      - name: 🔑 Generate cache keys
         id: cache-key
-        run: echo "key=npm-${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
+        run: |
+          echo "key=npm-${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
+          echo "vercel-key=vercel-env-${{ env.VERCEL_PROJECT }}-${{ github.sha }}" >> $GITHUB_OUTPUT
         
       - name: 💾 Restore dependencies cache
         uses: actions/cache@v4
-        id: cache
+        id: deps-cache
         with:
           path: node_modules
           key: ${{ steps.cache-key.outputs.key }}
           restore-keys: npm-
           
-      - name: 📦 Setup Node.js
-        if: steps.cache.outputs.cache-hit != 'true'
+      - name: 📦 Setup Node.js (conditional)
+        if: steps.deps-cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           
-      - name: 🔧 Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          npm ci --frozen-lockfile --prefer-offline
+      - name: 🔧 Install dependencies (conditional)
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: npm ci --frozen-lockfile --prefer-offline
         env:
           NPM_CONFIG_AUDIT: false
+          
+      - name: 💾 Check Vercel env cache
+        uses: actions/cache@v4
+        id: vercel-cache
+        with:
+          path: .env.production
+          key: ${{ steps.cache-key.outputs.vercel-key }}
+          
+      - name: 🔗 Setup Vercel environment (conditional)
+        if: steps.vercel-cache.outputs.cache-hit != 'true'
+        run: |
+          npx vercel@${{ env.VERCEL_VERSION }} link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=${{ env.VERCEL_PROJECT }}
+          npx vercel@${{ env.VERCEL_VERSION }} env pull .env.production --environment=production --token=${{ secrets.VERCEL_TOKEN }} --yes
 
   # 代码质量检查
   quality-gate:
     name: 🔍 Quality Gate
     runs-on: ubuntu-latest
-    needs: setup
-    timeout-minutes: 8
+    needs: shared-setup
+    timeout-minutes: 6
     permissions:
       contents: read
     
@@ -73,7 +91,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ needs.setup.outputs.cache-key }}
+          key: ${{ needs.shared-setup.outputs.cache-key }}
           fail-on-cache-miss: true
         
       - name: 🧹 Run ESLint
@@ -100,8 +118,8 @@ jobs:
   build-test:
     name: 🏗️ Build Verification
     runs-on: ubuntu-latest
-    needs: [setup, quality-gate]
-    timeout-minutes: 10
+    needs: shared-setup
+    timeout-minutes: 8
     permissions:
       contents: read
     
@@ -118,21 +136,22 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ needs.setup.outputs.cache-key }}
+          key: ${{ needs.shared-setup.outputs.cache-key }}
           fail-on-cache-miss: true
         
-      - name: 🔗 Link Vercel Project
-        run: npx vercel@47.0.5 link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=v0-gap-drill-error-notebook
-        
-      - name: 🔧 Pull Vercel Environment Variables
-        run: npx vercel@47.0.5 env pull .env.production --environment=production --token=${{ secrets.VERCEL_TOKEN }} --yes
+      - name: 💾 Restore Vercel environment
+        uses: actions/cache@v4
+        with:
+          path: .env.production
+          key: ${{ needs.shared-setup.outputs.vercel-key }}
+          fail-on-cache-miss: true
         
       - name: 🏗️ Build application
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_ENV: production
-        timeout-minutes: 8
+        timeout-minutes: 6
           
       - name: 📈 Bundle size check
         run: |
@@ -148,19 +167,22 @@ jobs:
       - name: 💾 Cache build artifacts
         uses: actions/cache@v4
         with:
-          path: .next
-          key: build-${{ github.sha }}
+          path: |
+            .next
+            .next/cache
+            node_modules/.cache
+          key: build-${{ runner.os }}-${{ hashFiles('package-lock.json', 'next.config.*') }}-${{ github.sha }}
           restore-keys: |
-            build-${{ github.ref_name }}-
-            build-
+            build-${{ runner.os }}-${{ hashFiles('package-lock.json', 'next.config.*') }}-
+            build-${{ runner.os }}-
 
   # 安全扫描
   security-scan:
     name: 🛡️ Security Scan
     runs-on: ubuntu-latest
-    needs: [setup, quality-gate]
+    needs: shared-setup
     if: github.event_name == 'pull_request'
-    timeout-minutes: 12
+    timeout-minutes: 8
     permissions:
       contents: read
       security-events: write
@@ -179,7 +201,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ needs.setup.outputs.cache-key }}
+          key: ${{ needs.shared-setup.outputs.cache-key }}
           fail-on-cache-miss: true
         
       - name: 🔍 Run CodeQL Analysis
@@ -187,11 +209,12 @@ jobs:
         with:
           languages: javascript
           
-      - name: 🔗 Link Vercel Project for CodeQL
-        run: npx vercel@47.0.5 link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=v0-gap-drill-error-notebook
-        
-      - name: 🔧 Pull Vercel Environment Variables for CodeQL
-        run: npx vercel@47.0.5 env pull .env.production --environment=production --token=${{ secrets.VERCEL_TOKEN }} --yes
+      - name: 💾 Restore Vercel environment for CodeQL
+        uses: actions/cache@v4
+        with:
+          path: .env.production
+          key: ${{ needs.shared-setup.outputs.vercel-key }}
+          fail-on-cache-miss: true
           
       - name: 🏗️ Autobuild
         uses: github/codeql-action/autobuild@v3
