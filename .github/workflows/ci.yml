@@ -125,12 +125,13 @@ jobs:
         run: npx vercel@47.0.5 link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=v0-gap-drill-error-notebook
         
       - name: 🔧 Pull Vercel Environment Variables
-        run: npx vercel@47.0.5 env pull .env.ci --token=${{ secrets.VERCEL_TOKEN }} --yes
+        run: npx vercel@47.0.5 env pull .env.production --environment=production --token=${{ secrets.VERCEL_TOKEN }} --yes
         
       - name: 🏗️ Build application
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
+          NODE_ENV: production
         timeout-minutes: 8
           
       - name: 📈 Bundle size check
@@ -190,10 +191,12 @@ jobs:
         run: npx vercel@47.0.5 link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=v0-gap-drill-error-notebook
         
       - name: 🔧 Pull Vercel Environment Variables for CodeQL
-        run: npx vercel@47.0.5 env pull .env.ci --token=${{ secrets.VERCEL_TOKEN }} --yes
+        run: npx vercel@47.0.5 env pull .env.production --environment=production --token=${{ secrets.VERCEL_TOKEN }} --yes
           
       - name: 🏗️ Autobuild
         uses: github/codeql-action/autobuild@v3
+        env:
+          NODE_ENV: production
           
       - name: 🔍 Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
