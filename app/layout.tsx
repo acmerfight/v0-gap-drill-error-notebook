@@ -46,7 +46,6 @@ export default function RootLayout({
               `,
             }}
           />
-          <script async src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
           <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         </head>
         <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>

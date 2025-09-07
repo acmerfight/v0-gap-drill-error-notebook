@@ -51,7 +51,7 @@ export default function RecognitionResultPage() {
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "success" | "error">("idle")
   const router = useRouter()
 
-  const [currentLang, setCurrentLang] = useState<"zh" | "en">("zh")
+  const [_currentLang, setCurrentLang] = useState<"zh" | "en">("zh")
   const [t, setT] = useState<Translations>(getTranslations("zh"))
 
   useEffect(() => {

@@ -32,16 +32,16 @@ export default function HomePage() {
   const [uploadStatus, setUploadStatus] = useState<"idle" | "uploading" | "success" | "error">("idle")
   const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
-  const { user, isLoaded } = useUser()
+  const { isLoaded } = useUser()
 
-  const [currentLang, setCurrentLang] = useState<"zh" | "en">("zh")
+  const [_currentLang, setCurrentLang] = useState<"zh" | "en">("zh")
   const [t, setT] = useState<Translations>(getTranslations("zh"))
 
   useEffect(() => {
     const detectedLang = detectLanguage()
     setCurrentLang(detectedLang)
     setT(getTranslations(detectedLang))
-  }, [])
+  }, [setCurrentLang])
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
