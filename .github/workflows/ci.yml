@@ -121,6 +121,9 @@ jobs:
           key: ${{ needs.setup.outputs.cache-key }}
           fail-on-cache-miss: true
         
+      - name: 🔧 Pull Vercel Environment Variables
+        run: npx vercel@47.0.5 env pull .env.ci --token=${{ secrets.VERCEL_TOKEN }} --yes
+        
       - name: 🏗️ Build application
         run: npm run build
         env:
@@ -179,6 +182,9 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: javascript
+          
+      - name: 🔧 Pull Vercel Environment Variables for CodeQL
+        run: npx vercel@47.0.5 env pull .env.ci --token=${{ secrets.VERCEL_TOKEN }} --yes
           
       - name: 🏗️ Autobuild
         uses: github/codeql-action/autobuild@v3
