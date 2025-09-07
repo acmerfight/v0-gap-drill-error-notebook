@@ -26,6 +26,7 @@ import {
 import { useRouter } from "next/navigation"
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs"
 import { detectLanguage, getTranslations, type Translations } from "@/lib/i18n"
+import { CIPipelineStatus } from "@/components/ui/ci-status-badge"
 
 export default function HomePage() {
   const [dragActive, setDragActive] = useState(false)
@@ -310,6 +311,17 @@ export default function HomePage() {
           <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-foreground mb-3 text-balance">{t.aiRecognitionTitle}</h2>
             <p className="text-muted-foreground text-lg text-pretty max-w-md mx-auto">{t.aiRecognitionSubtitle}</p>
+          </div>
+
+          {/* CI/CD Pipeline Status Demo */}
+          <div className="mb-10">
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-bold text-foreground mb-2">🚀 CI/CD Pipeline Status</h3>
+              <p className="text-muted-foreground text-sm">
+                Real-time deployment pipeline monitoring
+              </p>
+            </div>
+            <CIPipelineStatus pipelineId="ci-cd-test-001" branch="test/ci-cd-validation-flow" />
           </div>
 
           <Card className="mb-10 gradient-card border-2 border-border elevation-2 transition-elevation hover:elevation-3 overflow-hidden rounded-2xl">
