@@ -100,7 +100,7 @@ jobs:
           fail-on-cache-miss: true
         
       - name: 🧹 Run ESLint
-        run: npm run lint
+        run: npm run lint:check
         continue-on-error: false
         
       - name: 📝 TypeScript check
