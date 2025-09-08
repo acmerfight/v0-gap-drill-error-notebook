@@ -12,7 +12,6 @@
     "type-check:watch": "tsc --noEmit --watch",
     "ci": "npm run ci:check",
     "ci:check": "npm run lint && echo '✅ Lint passed' && npm run type-check && echo '✅ Type check passed' && npm run build && echo '✅ Build completed'",
-    "ci:production": "echo '🚀 Starting Vercel production build with CI checks...' && npm run lint && echo '✅ Lint passed' && npm run type-check && echo '✅ Type check passed' && npm run build && echo '🎉 Vercel build completed successfully'",
     "audit:fix": "npm audit fix",
     "outdated": "npm outdated", 
     "clean": "npx rimraf .next node_modules/.cache",
@@ -20,7 +19,7 @@
     "health": "npm run type-check && npm run lint && echo '✅ Project health OK'"
   },
   "engines": {
-    "node": ">=22.0.0",
+    "node": "22.x",
     "npm": ">=10.0.0"
   },
   "dependencies": {

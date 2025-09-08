@@ -1,4 +1,4 @@
 {
-  "buildCommand": "npm run ci:production",
+  "buildCommand": "npm run type-check && npm run build",
   "installCommand": "npm ci --frozen-lockfile --prefer-offline"
 }

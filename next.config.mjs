@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
-    // Enable ESLint checking during builds
-    ignoreDuringBuilds: false,
+    // Trust CI ESLint checks, skip during builds for performance
+    ignoreDuringBuilds: true,
   },
   typescript: {
     // Enable TypeScript checking during builds
