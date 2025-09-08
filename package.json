@@ -19,7 +19,7 @@
     "health": "npm run type-check && npm run lint && echo '✅ Project health OK'"
   },
   "engines": {
-    "node": ">=22.0.0",
+    "node": "22.x",
     "npm": ">=10.0.0"
   },
   "dependencies": {
