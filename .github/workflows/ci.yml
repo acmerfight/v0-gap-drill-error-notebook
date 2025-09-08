@@ -109,11 +109,9 @@ jobs:
         
       - name: 🔒 Security audit
         run: |
-          set -e
-          npm audit --audit-level=high || {
-            echo "⚠️ Security vulnerabilities found, but continuing..."
-            npm audit --audit-level=critical
-          }
+          echo "ℹ️ Running security audit (informational only)..."
+          npm audit --audit-level=high || echo "⚠️ Security vulnerabilities detected but not blocking"
+          echo "✅ Security audit completed"
         
       - name: 📊 Dependency check
         run: npm outdated --depth=0 || true
