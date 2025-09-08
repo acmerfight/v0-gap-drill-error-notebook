@@ -1,0 +1,4 @@
+{
+  "buildCommand": "npm run ci:production",
+  "installCommand": "npm ci --frozen-lockfile --prefer-offline"
+}
