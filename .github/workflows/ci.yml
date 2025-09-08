@@ -181,20 +181,29 @@ jobs:
             build-${{ runner.os }}-${{ hashFiles('package-lock.json', 'next.config.*') }}-
             build-${{ runner.os }}-
 
-  # 安全扫描
+  # 安全扫描 (优化版：条件触发+精准规则)
   security-scan:
     name: 🛡️ Security Scan
     runs-on: ubuntu-latest
     needs: shared-setup
-    timeout-minutes: 8
+    timeout-minutes: 4
     permissions:
       contents: read
       security-events: write
       actions: read
+    # 条件触发：仅当代码文件变更或主分支推送时执行
+    if: >
+      contains(github.event.pull_request.changed_files, '.ts') ||
+      contains(github.event.pull_request.changed_files, '.tsx') ||
+      contains(github.event.pull_request.changed_files, '.js') ||
+      contains(github.event.pull_request.changed_files, '.jsx') ||
+      github.ref == 'refs/heads/main'
     
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
         
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
@@ -206,24 +215,22 @@ jobs:
         with:
           path: node_modules
           key: ${{ needs.shared-setup.outputs.cache-key }}
-          fail-on-cache-miss: true
+          fail-on-cache-miss: false
+          restore-keys: npm-
         
-      - name: 🔍 Run CodeQL Analysis
+      - name: 🔍 Run CodeQL Analysis (精准规则集)
         uses: github/codeql-action/init@v3
         with:
           languages: javascript
+          config-file: ./.github/codeql/codeql-config.yml
           
-      - name: 💾 Restore Vercel environment for CodeQL
-        uses: actions/cache@v4
-        with:
-          path: .env.production
-          key: ${{ needs.shared-setup.outputs.vercel-key }}
-          fail-on-cache-miss: true
-          
-      - name: 🏗️ Autobuild
+      - name: 🏗️ Autobuild (轻量级)
         uses: github/codeql-action/autobuild@v3
         env:
           NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
           
       - name: 🔍 Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript"

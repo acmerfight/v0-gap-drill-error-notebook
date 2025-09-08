@@ -1,0 +1,67 @@
+name: "CodeQL Security-Focused Config"
+
+# 精准查询集：聚焦高价值安全检查
+queries:
+  - uses: security-and-quality
+  - uses: security-extended
+
+# 排除低价值检查，提升性能
+query-filters:
+  - exclude:
+      tags:
+        - "complexity"
+        - "maintainability" 
+        - "lines-of-code"
+        - "unused"
+      id:
+        # 排除代码质量类检查（开发阶段ESLint已覆盖）
+        - "js/unused-local-variable"
+        - "js/unused-parameter"
+        - "js/complexity/cognitive"
+        - "js/lines-of-code"
+        - "js/lines-of-commented-out-code"
+        
+        # 排除并发类检查（前端应用不适用）
+        - "js/race-condition"
+        - "js/concurrent-modification"
+        
+        # 排除低风险路径检查
+        - "js/path-traversal"
+        - "js/zipslip"
+
+# 保留关键安全检查
+  - include:
+      tags:
+        - "security"
+        - "external/cwe"
+      queries:
+        # XSS防护（项目有dangerouslySetInnerHTML）
+        - "js/xss"
+        - "js/xss-through-dom"
+        - "js/unsafe-html-construction"
+        
+        # 注入攻击检测  
+        - "js/code-injection"
+        - "js/sql-injection"
+        - "js/template-injection"
+        
+        # 敏感数据泄露
+        - "js/hardcoded-credentials"
+        - "js/clear-text-logging"
+        - "js/sensitive-data-disclosure"
+        
+        # 认证和授权
+        - "js/missing-authentication"
+        - "js/weak-cryptographic-algorithm"
+
+# 性能优化配置
+disable-default-queries: false
+paths-ignore:
+  - "node_modules/**"
+  - ".next/**"
+  - "build/**"
+  - "dist/**"
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts" 
+  - "**/*.spec.tsx"

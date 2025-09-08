@@ -1,0 +1,94 @@
+name: 🔒 Weekly Security Scan
+
+# 深度安全扫描：每周全面检查，补充PR增量扫描
+on:
+  schedule:
+    # 每周一凌晨2点执行（UTC）
+    - cron: '0 2 * * 1'
+  workflow_dispatch: # 手动触发
+
+env:
+  NODE_VERSION: '22'
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  comprehensive-security:
+    name: 🛡️ 全面安全扫描
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+      
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 🔧 Install dependencies
+        run: npm ci --frozen-lockfile --prefer-offline
+        
+      # 全量CodeQL分析（包含所有规则）
+      - name: 🔍 Full CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+          queries: security-and-quality,security-extended
+          
+      - name: 🏗️ Build for analysis
+        uses: github/codeql-action/autobuild@v3
+        env:
+          NODE_ENV: production
+          
+      - name: 🔍 Perform Full Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript/weekly-scan"
+          
+      # 依赖漏洞扫描
+      - name: 🔐 Dependency vulnerability scan
+        run: |
+          npm audit --audit-level=moderate --json > audit-results.json || true
+          if [ -s audit-results.json ]; then
+            echo "📋 发现依赖漏洞，请检查 audit-results.json"
+            npm audit --audit-level=high
+          fi
+          
+      # 密钥扫描（深度）
+      - name: 🕵️ Deep secret scan
+        uses: trufflesecurity/trufflehog@v3.86.1
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified --no-update
+          
+      # 生成安全报告
+      - name: 📊 Generate security report
+        run: |
+          echo "## 🛡️ 周度安全扫描报告" > security-report.md
+          echo "**扫描时间:** $(date)" >> security-report.md
+          echo "**Git Commit:** ${{ github.sha }}" >> security-report.md
+          echo "" >> security-report.md
+          
+          if [ -s audit-results.json ]; then
+            echo "### 📦 依赖漏洞分析" >> security-report.md
+            jq -r '.vulnerabilities | keys[] as $k | "\(.[$k] | .title): \(.[$k] | .severity)"' audit-results.json >> security-report.md || echo "依赖扫描完成" >> security-report.md
+          fi
+          
+      - name: 📤 Upload security artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-scan-results-${{ github.run_number }}
+          path: |
+            security-report.md
+            audit-results.json
