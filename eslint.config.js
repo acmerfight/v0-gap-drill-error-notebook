@@ -29,7 +29,7 @@ module.exports = [
     js.configs.recommended,
     
     // Next.js specific rules
-    ...compat.extends("next/core-web-vitals"),
+    ...compat.extends("next/core-web-vitals", "next/typescript"),
     
     // Custom rules for all files
     {
