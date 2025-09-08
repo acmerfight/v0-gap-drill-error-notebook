@@ -1,10 +1,15 @@
-name: 🔄 CI Pipeline
+name: 🚀 PR Quality Gate
+
+# 环境一致性 CI/CD 流程设计:
+# 1. PR 阶段: GitHub Actions 完整验证 (镜像 Vercel 环境)
+# 2. 分支保护: 强制基于最新代码 + 通过验证后允许合并
+# 3. 合并后: Vercel 自动部署 (使用相同环境配置重新验证)
+# 优势: 避免重复执行，确保环境100%一致
 
 on:
-  push:
-    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
+    types: [opened, synchronize, reopened]
 
 env:
   NODE_VERSION: '22'
@@ -13,9 +18,9 @@ env:
   VERCEL_VERSION: '47.0.5'
 
 jobs:
-  # 共享环境和依赖设置
+  # 共享环境和依赖设置 (镜像 Vercel 配置)
   shared-setup:
-    name: 🚀 Shared Environment Setup
+    name: 🔧 Environment Setup (Vercel Mirror)
     runs-on: ubuntu-latest
     timeout-minutes: 4
     permissions:
@@ -50,7 +55,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           
-      - name: 🔧 Install dependencies (conditional)
+      - name: 🔧 Install dependencies (镜像 Vercel)
         if: steps.deps-cache.outputs.cache-hit != 'true'
         run: npm ci --frozen-lockfile --prefer-offline
         env:
@@ -69,9 +74,9 @@ jobs:
           npx vercel@${{ env.VERCEL_VERSION }} link --token=${{ secrets.VERCEL_TOKEN }} --yes --project=${{ env.VERCEL_PROJECT }}
           npx vercel@${{ env.VERCEL_VERSION }} env pull .env.production --environment=production --token=${{ secrets.VERCEL_TOKEN }} --yes
 
-  # 代码质量检查
+  # PR 质量检查 (镜像 Vercel 验证)
   quality-gate:
-    name: 🔍 Quality Gate
+    name: 🔍 Code Quality Validation
     runs-on: ubuntu-latest
     needs: shared-setup
     timeout-minutes: 6
@@ -114,9 +119,9 @@ jobs:
         run: npm outdated --depth=0 || true
         continue-on-error: true
 
-  # 构建验证
+  # 构建验证 (镜像 Vercel 环境)
   build-test:
-    name: 🏗️ Build Verification
+    name: 🏗️ Build Verification (Vercel Mirror)
     runs-on: ubuntu-latest
     needs: shared-setup
     timeout-minutes: 8
@@ -146,8 +151,8 @@ jobs:
           key: ${{ needs.shared-setup.outputs.vercel-key }}
           fail-on-cache-miss: true
         
-      - name: 🏗️ Build application
-        run: npm run build
+      - name: 🏗️ Build application (镜像 Vercel)
+        run: npm run ci:production
         env:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_ENV: production
