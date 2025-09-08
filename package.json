@@ -16,9 +16,8 @@
     "outdated": "npm outdated",
     "clean": "npx rimraf .next node_modules/.cache",
     "clean:deps": "npx rimraf node_modules package-lock.json && npm install",
-    "health": "npm run type-check && npm run lint && echo '✅ Project health OK'",
-    "lint:check": "eslint --max-warnings 0 .",
-    "lint:report": "eslint --format=json --output-file=eslint-report.json . || true"
+    "health": "npm run type-check && npm run lint:check && echo '✅ Project health OK'",
+    "lint:check": "eslint --max-warnings 0 ."
   },
   "engines": {
     "node": "22.x",

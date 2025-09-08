@@ -34,7 +34,7 @@ export default function HomePage() {
   const router = useRouter()
   const { isLoaded } = useUser()
 
-  const [_currentLang, setCurrentLang] = useState<"zh" | "en">("zh")
+  const [, setCurrentLang] = useState<"zh" | "en">("zh")
   const [t, setT] = useState<Translations>(getTranslations("zh"))
 
   useEffect(() => {
