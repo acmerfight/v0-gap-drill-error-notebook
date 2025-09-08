@@ -8,11 +8,14 @@ const compat = new FlatCompat({
 });
 
 module.exports = [
-    // Ignore patterns
+    // Consolidated ignore patterns
     {
         ignores: [
-            "**/.next/**",
-            "**/node_modules/**", 
+            "node_modules/**", 
+            "**/.next/**", 
+            "out/**", 
+            "build/**", 
+            "next-env.d.ts",
             "**/dist/**",
             "**/.vercel/**",
             "**/coverage/**",
@@ -30,42 +33,41 @@ module.exports = [
     
     // Custom rules for all files
     {
-        languageOptions: {
-            ecmaVersion: 2024,
-            sourceType: "module",
-            parserOptions: {
-                ecmaFeatures: {
-                    jsx: true,
-                },
+    languageOptions: {
+        ecmaVersion: 2024,
+        sourceType: "module",
+        parserOptions: {
+            ecmaFeatures: {
+                jsx: true,
             },
         },
-        
-        rules: {
-            // Core quality rules
-            "prefer-const": "error",
-            "no-var": "error", 
-            "no-console": "warn",
-            "no-debugger": "error",
-            "eqeqeq": ["error", "always"],
-            "curly": ["error", "all"],
-            
-            // Unused variables with underscore prefix allowance
-            "no-unused-vars": ["error", {
-                "argsIgnorePattern": "^_",
-                "varsIgnorePattern": "^_",
-                "ignoreRestSiblings": true
-            }],
-            
-            // Security rules
-            "no-eval": "error",
-            "no-implied-eval": "error", 
-            "no-new-func": "error",
-            "no-script-url": "error",
-            
-            // React rules
-            "react/react-in-jsx-scope": "off",
-            "react/prop-types": "off",
-            "react-hooks/exhaustive-deps": "warn",
-        },
     },
-];
+    
+    rules: {
+        // Core quality rules
+        "prefer-const": "error",
+        "no-var": "error", 
+        "no-console": "warn",
+        "no-debugger": "error",
+        "eqeqeq": ["error", "always"],
+        "curly": ["error", "all"],
+        
+        // Unused variables with underscore prefix allowance
+        "no-unused-vars": ["error", {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_",
+            "ignoreRestSiblings": true
+        }],
+        
+        // Security rules
+        "no-eval": "error",
+        "no-implied-eval": "error", 
+        "no-new-func": "error",
+        "no-script-url": "error",
+        
+        // React rules
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": "off",
+        "react-hooks/exhaustive-deps": "warn",
+    },
+}];

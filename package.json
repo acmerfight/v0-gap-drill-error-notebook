@@ -4,19 +4,21 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev", 
+    "dev": "next dev",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
     "ci": "npm run ci:check",
     "ci:check": "npm run lint && echo '✅ Lint passed' && npm run type-check && echo '✅ Type check passed' && npm run build && echo '✅ Build completed'",
     "audit:fix": "npm audit fix",
-    "outdated": "npm outdated", 
+    "outdated": "npm outdated",
     "clean": "npx rimraf .next node_modules/.cache",
     "clean:deps": "npx rimraf node_modules package-lock.json && npm install",
-    "health": "npm run type-check && npm run lint && echo '✅ Project health OK'"
+    "health": "npm run type-check && npm run lint && echo '✅ Project health OK'",
+    "lint:check": "eslint --max-warnings 0 .",
+    "lint:report": "eslint --format=json --output-file=eslint-report.json . || true"
   },
   "engines": {
     "node": "22.x",
