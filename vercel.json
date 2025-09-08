@@ -1,7 +1,6 @@
 {
   "buildCommand": "npm run ci:production",
   "installCommand": "npm ci --frozen-lockfile --prefer-offline",
-  "framework": null,
   "headers": [
     {
       "source": "/(.*)",
