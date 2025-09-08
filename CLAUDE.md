@@ -1,7 +1,5 @@
-# The Zen of Modern Frontend Development
-## Claude Code Ultra-Think 模式指南
 
-### 🧠 核心原则 (The Frontend Zen)
+### 🧠 核心原则 (The Rule)
 
 ```
 错误应该显式处理，永远不要静默忽略 - Errors should never pass silently
