@@ -1,9 +1,4 @@
 {
   "buildCommand": "npm run type-check && npm run build",
-  "installCommand": "npm ci --frozen-lockfile --prefer-offline",
-  "functions": {
-    "app/**": {
-      "runtime": "nodejs22.x"
-    }
-  }
+  "installCommand": "npm ci --frozen-lockfile --prefer-offline"
 }
