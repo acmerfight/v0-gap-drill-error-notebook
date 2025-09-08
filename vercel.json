@@ -1,7 +1,6 @@
 {
-  "buildCommand": "npm run ci:production",
+  "buildCommand": "npm run ci:production", 
   "installCommand": "npm ci --frozen-lockfile --prefer-offline",
-  "nodeVersion": "22",
   "framework": null,
   "outputDirectory": ".next",
   "git": {
