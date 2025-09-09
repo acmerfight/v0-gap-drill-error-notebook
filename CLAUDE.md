@@ -17,7 +17,6 @@ Package:     pnpm (>=8.0.0, recommended: 10.15.1)
 
 常用命令：
 ```bash
-pnpm s            # 🚀 快速启动 (install + vercel env pull + dev)
 pnpm dev          # 开发模式
 pnpm build        # 构建项目  
 pnpm ci           # CI检查 (lint + type-check + build)
