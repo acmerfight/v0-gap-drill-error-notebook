@@ -10,19 +10,20 @@
     "lint:fix": "eslint --fix .",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
-    "ci": "npm run ci:check",
-    "ci:check": "npm run lint && echo '✅ Lint passed' && npm run type-check && echo '✅ Type check passed' && npm run build && echo '✅ Build completed'",
-    "audit:fix": "npm audit fix",
-    "outdated": "npm outdated", 
+    "ci": "pnpm run ci:check",
+    "ci:check": "pnpm run lint && echo '✅ Lint passed' && pnpm run type-check && echo '✅ Type check passed' && pnpm run build && echo '✅ Build completed'",
+    "audit:fix": "pnpm audit --fix",
+    "outdated": "pnpm outdated", 
     "clean": "npx rimraf .next node_modules/.cache",
-    "clean:deps": "npx rimraf node_modules package-lock.json && npm install",
-    "health": "npm run type-check && npm run lint:check && echo '✅ Project health OK'",
+    "clean:deps": "npx rimraf node_modules pnpm-lock.yaml && pnpm install",
+    "health": "pnpm run type-check && pnpm run lint:check && echo '✅ Project health OK'",
     "lint:check": "eslint --max-warnings 0 ."
   },
   "engines": {
     "node": "22.x",
-    "npm": ">=10.0.0"
+    "pnpm": ">=8.0.0"
   },
+  "packageManager": "pnpm@10.15.1",
   "dependencies": {
     "@clerk/nextjs": "^6.31.9",
     "@radix-ui/react-accordion": "1.2.12",

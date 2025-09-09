@@ -37,7 +37,7 @@ jobs:
       - name: 🔑 Generate cache keys
         id: cache-key
         run: |
-          echo "key=npm-${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
+          echo "key=pnpm-${{ hashFiles('pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
           echo "vercel-key=vercel-env-${{ env.VERCEL_PROJECT }}-${{ github.sha }}" >> $GITHUB_OUTPUT
         
       - name: 💾 Restore dependencies cache
@@ -46,20 +46,24 @@ jobs:
         with:
           path: node_modules
           key: ${{ steps.cache-key.outputs.key }}
-          restore-keys: npm-
+          restore-keys: pnpm-
           
-      - name: 📦 Setup Node.js (conditional)
+      - name: 📦 Setup Node.js & pnpm (conditional)
         if: steps.deps-cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+      
+      - name: 📦 Setup pnpm
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
           
       - name: 🔧 Install dependencies (镜像 Vercel)
         if: steps.deps-cache.outputs.cache-hit != 'true'
-        run: npm ci --frozen-lockfile --prefer-offline
-        env:
-          NPM_CONFIG_AUDIT: false
+        run: pnpm install --frozen-lockfile
           
       - name: 💾 Check Vercel env cache
         uses: actions/cache@v4
@@ -100,7 +104,7 @@ jobs:
           fail-on-cache-miss: true
         
       - name: 🧹 Run ESLint
-        run: npm run lint:check
+        run: pnpm run lint:check
         continue-on-error: false
         
       - name: 📝 TypeScript check
@@ -110,11 +114,11 @@ jobs:
       - name: 🔒 Security audit
         run: |
           echo "ℹ️ Running security audit (informational only)..."
-          npm audit --audit-level=high || echo "⚠️ Security vulnerabilities detected but not blocking"
+          pnpm audit --audit-level=high || echo "⚠️ Security vulnerabilities detected but not blocking"
           echo "✅ Security audit completed"
         
       - name: 📊 Dependency check
-        run: npm outdated --depth=0 || true
+        run: pnpm outdated || true
         continue-on-error: true
 
   # 构建验证 (镜像 Vercel 环境)
@@ -150,7 +154,7 @@ jobs:
           fail-on-cache-miss: true
         
       - name: 🏗️ Build application (镜像 Vercel)
-        run: npm run build
+        run: pnpm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_ENV: production
