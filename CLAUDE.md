@@ -8,11 +8,21 @@ Auth:        Clerk Authentication
 Deploy:      Vercel (Node.js 22 target)
 Analytics:   Vercel Analytics
 Linting:     ESLint 9 + TypeScript ESLint
+Package:     pnpm (>=8.0.0, recommended: 10.15.1)
 ```
 
 ### 🛠️ 项目命令
 
-所有可用命令请查看 `package.json` 中的 `scripts` 字段
+使用 **pnpm** 运行项目命令，详见 `package.json` 中的 `scripts` 字段
+
+常用命令：
+```bash
+pnpm dev          # 开发模式
+pnpm build        # 构建项目  
+pnpm ci           # CI检查 (lint + type-check + build)
+pnpm lint:fix     # 修复代码格式
+pnpm type-check   # TypeScript类型检查
+```
 
 ### 🧠 核心原则 (The Rule)
 
@@ -39,4 +49,3 @@ Linting:     ESLint 9 + TypeScript ESLint
 /styles             # 全局样式文件  
 /public             # 静态资源
 ```
-
