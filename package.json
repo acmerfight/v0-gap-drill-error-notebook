@@ -17,7 +17,7 @@
     "clean": "npx rimraf .next node_modules/.cache",
     "clean:deps": "npx rimraf node_modules pnpm-lock.yaml && pnpm install",
     "health": "pnpm run type-check && pnpm run lint:check && echo '✅ Project health OK'",
-    "lint:check": "eslint --max-warnings 0 .",
+    "lint:check": "eslint --max-warnings 0 ."
   },
   "engines": {
     "node": "22.x",
