@@ -53,7 +53,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-      
+          
       - name: 📦 Setup pnpm
         if: steps.deps-cache.outputs.cache-hit != 'true'
         uses: pnpm/action-setup@v2
@@ -111,6 +111,12 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+          run_install: false
+          
       - name: 💾 Restore dependencies
         uses: actions/cache@v4
         with:
@@ -153,6 +159,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+          run_install: false
           
       - name: 💾 Restore dependencies
         uses: actions/cache@v4
@@ -217,6 +229,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+          run_install: false
           
       - name: 💾 Restore dependencies
         uses: actions/cache@v4
