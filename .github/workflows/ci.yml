@@ -71,11 +71,14 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           pnpm-version: '10'
 
-      - name: 🧹 Run ESLint (strict mode)
-        run: pnpm run lint:check
+      - name: 🧹 ESLint check (pre-commit handled most issues)
+        run: |
+          echo "ℹ️ Note: Basic ESLint issues are caught by pre-commit hooks"
+          echo "ℹ️ This is a final validation check"
+          pnpm run lint:check
         continue-on-error: false
 
-      - name: 📝 TypeScript check
+      - name: 📝 TypeScript check (full project)
         run: |
           rm -rf node_modules/.cache tsconfig.tsbuildinfo .next/cache
           npx tsc --noEmit

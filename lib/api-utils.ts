@@ -40,6 +40,7 @@ export function createErrorResponse(
 }
 
 export function handleApiError(error: unknown): NextResponse<ApiResponse> {
+  // eslint-disable-next-line no-console
   console.error('API Error:', error);
 
   if (error instanceof ZodError) {
