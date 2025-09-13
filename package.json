@@ -29,6 +29,7 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix --cache",
       "eslint --max-warnings 0 --cache",
+      "bash -c 'rm -rf node_modules/.cache tsconfig.tsbuildinfo .next/cache && npx tsc --noEmit'",
       "prettier --write"
     ],
     "*.{css,scss}": [
