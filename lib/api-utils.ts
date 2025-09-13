@@ -45,7 +45,7 @@ export function handleApiError(error: unknown): NextResponse<ApiResponse> {
       'Invalid input data',
       'VALIDATION_ERROR',
       400,
-      error.errors
+      error.issues
     );
   }
 
