@@ -75,7 +75,7 @@ jobs:
         
       - name: 📝 TypeScript check
         run: |
-          rm -rf node_modules/.cache
+          rm -rf node_modules/.cache tsconfig.tsbuildinfo .next/cache
           npx tsc --noEmit
         continue-on-error: false
         
