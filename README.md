@@ -1,6 +1,17 @@
 # GapDrill error notebook
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+_Automatically synced with your [v0.app](https://v0.app) deployments_
+
+<!-- Test change to trigger PR preview deployment and e2e testing -->
+
+## 🧪 E2E Testing Enabled
+
+This PR demonstrates the complete e2e testing workflow:
+
+- ✅ Vercel auto-deploys preview on PR
+- 🤖 GitHub Actions waits for `deployment_status` event
+- 🔗 Simple connectivity test validates preview URL
+- 🛡️ Branch protection prevents merge if e2e fails
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/acmerfights-projects/v0-gap-drill-error-notebook)
 [![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/rbye89EA47D)
