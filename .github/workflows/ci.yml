@@ -52,8 +52,8 @@ jobs:
           npx vercel@${{ env.VERCEL_VERSION }} env pull .env.production --environment=production --token=${{ secrets.VERCEL_TOKEN }} --yes
 
   # PR 质量检查 (并行执行)
-  # 注意: pre-commit hooks 已处理基本格式化和 lint 修复
-  # CI 专注于完整验证和无法在 pre-commit 处理的检查
+  # 注意: pre-commit hooks 已处理 ESLint (--max-warnings 0) 和 TypeScript 检查
+  # CI 提供冗余验证，防止 pre-commit 被绕过或仅 CI 更改的情况
   quality-gate:
     name: 🔍 Code Quality Validation
     runs-on: ubuntu-latest
@@ -71,15 +71,17 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           pnpm-version: '10'
 
-      - name: 🧹 ESLint check (pre-commit handled most issues)
+      - name: 🧹 ESLint check (redundant validation)
         run: |
-          echo "ℹ️ Note: Basic ESLint issues are caught by pre-commit hooks"
-          echo "ℹ️ This is a final validation check"
+          echo "ℹ️ Note: ESLint with --max-warnings 0 is handled by pre-commit hooks"
+          echo "ℹ️ This is redundant validation for bypassed pre-commit or CI-only changes"
           pnpm run lint:check
         continue-on-error: false
 
-      - name: 📝 TypeScript check (full project)
+      - name: 📝 TypeScript check (redundant validation)
         run: |
+          echo "ℹ️ Note: TypeScript checking with cache cleanup is handled by pre-commit hooks"
+          echo "ℹ️ This is redundant validation for bypassed pre-commit or CI-only changes"
           rm -rf node_modules/.cache tsconfig.tsbuildinfo .next/cache
           npx tsc --noEmit
         continue-on-error: false
