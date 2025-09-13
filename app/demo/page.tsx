@@ -44,7 +44,7 @@ export default function DemoPage() {
   };
 
   const createUpload = async () => {
-    if (!formData.userId || !formData.imageUrl) return;
+    if (!formData.userId || !formData.imageUrl) {return;}
     
     setLoading(true);
     try {
@@ -68,7 +68,7 @@ export default function DemoPage() {
   };
 
   const createAiResult = async (uploadId: string) => {
-    if (!formData.aiQuestion || !formData.aiSolution) return;
+    if (!formData.aiQuestion || !formData.aiSolution) {return;}
     
     setLoading(true);
     try {

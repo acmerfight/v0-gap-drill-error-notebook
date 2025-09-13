@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: {
     message: string;
     code: string;
-    details?: any;
+    details?: unknown;
   };
 }
 
@@ -22,7 +22,7 @@ export function createErrorResponse(
   message: string,
   code: string = 'INTERNAL_ERROR',
   status: number = 500,
-  details?: any
+  details?: unknown
 ): NextResponse<ApiResponse> {
   return NextResponse.json(
     {
