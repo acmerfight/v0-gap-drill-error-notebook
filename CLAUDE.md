@@ -9,6 +9,7 @@ Deploy:      Vercel (Node.js 22 target)
 Analytics:   Vercel Analytics
 Linting:     ESLint 9 + TypeScript ESLint
 Package:     pnpm (>=8.0.0, recommended: 10.15.1)
+Storage:     neon, 可使用 Neon CLI
 ```
 
 ### 🛠️ 项目命令
