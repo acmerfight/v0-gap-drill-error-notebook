@@ -11,7 +11,9 @@ export interface ApiResponse<T = unknown> {
   };
 }
 
-export function createSuccessResponse<T>(data: T): NextResponse<ApiResponse<T>> {
+export function createSuccessResponse<T>(
+  data: T
+): NextResponse<ApiResponse<T>> {
   return NextResponse.json({
     success: true,
     data,
