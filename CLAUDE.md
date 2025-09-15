@@ -34,23 +34,12 @@ pnpm lint:fix     # 修复代码格式
 pnpm type-check   # TypeScript类型检查
 ```
 
-### 🔒 代码质量与安全
+### 🔒 代码质量
 
-项目采用严格的ESLint配置，集成关键安全和异步安全规则：
-
-**安全规则：**
-
-- `@typescript-eslint/no-floating-promises` - 防止未处理的Promise异常
-- `@typescript-eslint/no-unsafe-assignment` - 禁止不安全的类型赋值
-- `react/jsx-no-target-blank` - 防止XSS攻击（外链安全）
-- `@typescript-eslint/no-misused-promises` - 防止异步事件处理器误用
-
-**质量保证：**
-
-- 100% TypeScript类型覆盖
-- 零ESLint错误/警告要求
-- 自动pre-commit代码检查
-- 严格遵循项目核心原则：错误显式处理
+```bash
+pnpm lint         # ESLint检查
+pnpm lint:fix     # 自动修复
+```
 
 ### 🧠 核心原则 (The Rule)
 
