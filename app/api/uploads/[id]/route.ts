@@ -37,7 +37,7 @@ export async function PUT(
     const { id } = await params;
     const validatedId = uuidSchema.parse(id);
     
-    const body = await request.json();
+    const body: unknown = await request.json();
     const validatedData = updateUploadSchema.parse(body);
     
     const [updatedUpload] = await db
