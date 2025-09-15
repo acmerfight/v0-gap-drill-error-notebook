@@ -247,3 +247,5 @@ export default function DemoPage() {
     </div>
   );
 }
+// Test comment
+// Test pre-commit after fix
