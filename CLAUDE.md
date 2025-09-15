@@ -34,13 +34,6 @@ pnpm lint:fix     # 修复代码格式
 pnpm type-check   # TypeScript类型检查
 ```
 
-### 🔒 代码质量
-
-```bash
-pnpm lint         # ESLint检查
-pnpm lint:fix     # 自动修复
-```
-
 ### 🧠 核心原则 (The Rule)
 
 ```
