@@ -26,6 +26,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# eslint
+.eslintcache
+
+# prettier
+.prettier-cache
+
 # clerk configuration (can include secrets)
 /.clerk/
 .env*.local

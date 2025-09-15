@@ -9,7 +9,7 @@ name: 🚀 PR Quality Gate
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
     types: [opened, synchronize, reopened]
 
 env:
@@ -28,23 +28,23 @@ jobs:
       contents: read
     outputs:
       vercel-key: ${{ steps.cache-key.outputs.vercel-key }}
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 🔑 Generate Vercel cache key
         id: cache-key
         run: |
           echo "vercel-key=vercel-env-${{ env.VERCEL_PROJECT }}-${{ github.sha }}" >> $GITHUB_OUTPUT
-          
+
       - name: 💾 Check Vercel env cache
         uses: actions/cache@v4
         id: vercel-cache
         with:
           path: .env.production
           key: ${{ steps.cache-key.outputs.vercel-key }}
-          
+
       - name: 🔗 Setup Vercel environment (conditional)
         if: steps.vercel-cache.outputs.cache-hit != 'true'
         run: |
@@ -52,37 +52,46 @@ jobs:
           npx vercel@${{ env.VERCEL_VERSION }} env pull .env.production --environment=production --token=${{ secrets.VERCEL_TOKEN }} --yes
 
   # PR 质量检查 (并行执行)
+  # 注意: pre-commit hooks 已处理 ESLint (--max-warnings 0) 和 TypeScript 检查
+  # CI 提供冗余验证，防止 pre-commit 被绕过或仅 CI 更改的情况
   quality-gate:
     name: 🔍 Code Quality Validation
     runs-on: ubuntu-latest
     timeout-minutes: 4
     permissions:
       contents: read
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 🔧 Setup pnpm with caching
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: ${{ env.NODE_VERSION }}
           pnpm-version: '10'
-        
-      - name: 🧹 Run ESLint
-        run: pnpm run lint:check
+
+      - name: 🧹 ESLint check (redundant validation)
+        run: |
+          echo "ℹ️ Note: ESLint with --max-warnings 0 is handled by pre-commit hooks"
+          echo "ℹ️ This is redundant validation for bypassed pre-commit or CI-only changes"
+          pnpm run lint:check
         continue-on-error: false
-        
-      - name: 📝 TypeScript check
-        run: npx tsc --noEmit
+
+      - name: 📝 TypeScript check (redundant validation)
+        run: |
+          echo "ℹ️ Note: TypeScript checking with cache cleanup is handled by pre-commit hooks"
+          echo "ℹ️ This is redundant validation for bypassed pre-commit or CI-only changes"
+          rm -rf node_modules/.cache tsconfig.tsbuildinfo .next/cache
+          npx tsc --noEmit
         continue-on-error: false
-        
+
       - name: 🔒 Security audit
         run: |
           echo "ℹ️ Running security audit (informational only)..."
           pnpm audit --audit-level=high || echo "⚠️ Security vulnerabilities detected but not blocking"
           echo "✅ Security audit completed"
-        
+
       - name: 📊 Dependency check
         run: pnpm outdated || true
         continue-on-error: true
@@ -95,24 +104,24 @@ jobs:
     timeout-minutes: 6
     permissions:
       contents: read
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 🔧 Setup pnpm with caching
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: ${{ env.NODE_VERSION }}
           pnpm-version: '10'
-        
+
       - name: 💾 Restore Vercel environment
         uses: actions/cache@v4
         with:
           path: .env.production
           key: ${{ needs.setup.outputs.vercel-key }}
           fail-on-cache-miss: true
-          
+
       - name: 💾 Cache build artifacts
         uses: actions/cache@v4
         with:
@@ -122,14 +131,14 @@ jobs:
           key: build-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'next.config.*') }}
           restore-keys: |
             build-cache-${{ runner.os }}-
-        
+
       - name: 🏗️ Build application (镜像 Vercel)
         run: pnpm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_ENV: production
         timeout-minutes: 6
-          
+
       - name: 📈 Bundle size check
         run: |
           echo "Build size analysis:"
@@ -140,7 +149,7 @@ jobs:
             echo "❌ Build failed - .next directory not found"
             exit 1
           fi
-          
+
       - name: 💾 Cache build output
         uses: actions/cache@v4
         with:
@@ -159,33 +168,33 @@ jobs:
       contents: read
       security-events: write
       actions: read
-    
+
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 🔧 Setup pnpm with caching
         uses: ./.github/actions/setup-pnpm
         with:
           node-version: ${{ env.NODE_VERSION }}
           pnpm-version: '10'
-        
+
       - name: 🔍 Run CodeQL Analysis
         uses: github/codeql-action/init@v3
         with:
           languages: javascript
-          
+
       - name: 💾 Restore Vercel environment for CodeQL
         uses: actions/cache@v4
         with:
           path: .env.production
           key: ${{ needs.setup.outputs.vercel-key }}
           fail-on-cache-miss: true
-          
+
       - name: 🏗️ Autobuild
         uses: github/codeql-action/autobuild@v3
         env:
           NODE_ENV: production
-          
+
       - name: 🔍 Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
