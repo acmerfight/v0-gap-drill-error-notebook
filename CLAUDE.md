@@ -34,6 +34,15 @@ pnpm lint:fix     # 修复代码格式
 pnpm type-check   # TypeScript类型检查
 ```
 
+### 🔒 代码质量与安全
+
+**严格执行代码质量标准**：
+
+- 🚫 **禁止绕过检查**: `git commit --no-verify` 被严格禁止
+- 🛡️ **Pre-commit hooks**: 必须通过所有质量检查才允许提交
+- 🔍 **ESLint 安全规则**: 强制执行安全和异步安全规则
+- 📏 **TypeScript 严格模式**: 确保类型安全
+
 ### 🧠 核心原则 (The Rule)
 
 ```
