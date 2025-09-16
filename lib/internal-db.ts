@@ -12,13 +12,15 @@ import { auth } from '@clerk/nextjs/server';
 
 /**
  * Internal database operations - Server-side only
- * These functions include proper authentication and authorization
+ * Route-level protection is handled by middleware.ts
+ * These functions handle user identification and data isolation
  */
 
-async function requireAuth(): Promise<string> {
+async function getCurrentUserId(): Promise<string> {
   const { userId } = await auth();
+  // Middleware ensures user is authenticated, but we still check for safety
   if (!userId) {
-    throw new Error('Authentication required');
+    throw new Error('User session not found');
   }
   return userId;
 }
@@ -27,7 +29,7 @@ async function requireAuth(): Promise<string> {
 export async function createUpload(
   data: Omit<NewUserUpload, 'userId'>
 ): Promise<UserUpload> {
-  const userId = await requireAuth();
+  const userId = await getCurrentUserId();
 
   const [newUpload] = await db
     .insert(userUploads)
@@ -38,7 +40,7 @@ export async function createUpload(
 }
 
 export async function getUserUploads(): Promise<UserUpload[]> {
-  const userId = await requireAuth();
+  const userId = await getCurrentUserId();
 
   const uploads = await db
     .select()
@@ -50,7 +52,7 @@ export async function getUserUploads(): Promise<UserUpload[]> {
 }
 
 export async function getUploadById(id: string): Promise<UserUpload | null> {
-  const userId = await requireAuth();
+  const userId = await getCurrentUserId();
 
   const [upload] = await db
     .select()
@@ -64,7 +66,7 @@ export async function updateUpload(
   id: string,
   data: Partial<Omit<UserUpload, 'id' | 'userId' | 'createdAt'>>
 ): Promise<UserUpload | null> {
-  const userId = await requireAuth();
+  const userId = await getCurrentUserId();
 
   const [updatedUpload] = await db
     .update(userUploads)
@@ -76,7 +78,7 @@ export async function updateUpload(
 }
 
 export async function deleteUpload(id: string): Promise<boolean> {
-  const userId = await requireAuth();
+  const userId = await getCurrentUserId();
 
   const [deletedUpload] = await db
     .delete(userUploads)
@@ -90,7 +92,7 @@ export async function deleteUpload(id: string): Promise<boolean> {
 export async function createAiResult(
   data: NewAiProcessingResult
 ): Promise<AiProcessingResult> {
-  await requireAuth();
+  await getCurrentUserId(); // Verify user session
 
   // Verify the upload belongs to the current user
   const upload = await getUploadById(data.id);
@@ -107,7 +109,7 @@ export async function createAiResult(
 }
 
 export async function getUserAiResults(): Promise<AiProcessingResult[]> {
-  const userId = await requireAuth();
+  const userId = await getCurrentUserId();
 
   const results = await db
     .select({
@@ -128,7 +130,7 @@ export async function getUserAiResults(): Promise<AiProcessingResult[]> {
 export async function getAiResultById(
   id: string
 ): Promise<AiProcessingResult | null> {
-  const userId = await requireAuth();
+  const userId = await getCurrentUserId();
 
   const [result] = await db
     .select({
@@ -147,7 +149,7 @@ export async function getAiResultById(
 
 // Combined operations for convenience
 export async function getUploadWithAiResult(id: string) {
-  const userId = await requireAuth();
+  const userId = await getCurrentUserId();
 
   const [result] = await db
     .select()
@@ -159,7 +161,7 @@ export async function getUploadWithAiResult(id: string) {
 }
 
 export async function getAllUserDataWithResults() {
-  const userId = await requireAuth();
+  const userId = await getCurrentUserId();
 
   const results = await db
     .select()
