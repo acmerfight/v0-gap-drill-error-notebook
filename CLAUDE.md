@@ -40,15 +40,11 @@ pnpm type-check   # TypeScript类型检查
 
 - 🚫 **禁止绕过检查**: `git commit --no-verify` 被严格禁止
 - 🛡️ **Pre-commit hooks**: 必须通过所有质量检查才允许提交
-- 🔍 **ESLint 安全规则**: 强制执行安全和异步安全规则
-- 📏 **TypeScript 严格模式**: 确保类型安全
 
 **Git 工作流规范**：
 
 - 🚫 **严格禁止直接 push main**: 所有代码必须使用 Pull Request 方式提交
-- ✅ **分支保护**: 已启用 `enforce_admins: true` 和必需审查规则
 - 🔄 **工作流程**: `feature branch` → `PR` → `code review` → `merge`
-- 🛡️ **无例外原则**: 包括管理员在内的所有开发者必须遵守此规范
 
 ### 🧠 核心原则 (The Rule)
 
