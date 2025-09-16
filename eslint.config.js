@@ -33,13 +33,17 @@ module.exports = [
     
     // Custom rules for all files
     {
+    files: ["**/*.{js,jsx,ts,tsx}"],
     languageOptions: {
         ecmaVersion: 2024,
         sourceType: "module",
+        parser: require("@typescript-eslint/parser"),
         parserOptions: {
             ecmaFeatures: {
                 jsx: true,
             },
+            project: "./tsconfig.json",
+            tsconfigRootDir: __dirname,
         },
     },
     
@@ -65,9 +69,21 @@ module.exports = [
         "no-new-func": "error",
         "no-script-url": "error",
         
+        // TypeScript specific rules
+        "@typescript-eslint/no-unsafe-assignment": "error",
+
+        // Async/Promise safety rules (Critical for production)
+        "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/no-misused-promises": "error",
+        "require-await": "error",
+
         // React rules
         "react/react-in-jsx-scope": "off",
         "react/prop-types": "off",
         "react-hooks/exhaustive-deps": "warn",
+
+        // React security rules
+        "react/jsx-no-target-blank": "error",
     },
 }];

@@ -36,8 +36,8 @@ export default function DemoPage() {
   const fetchUploads = async () => {
     try {
       const response = await fetch('/api/uploads');
-      const data = await response.json();
-      setUploads(data);
+      const data: unknown = await response.json();
+      setUploads(data as Upload[]);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Error fetching uploads:', error);
@@ -61,7 +61,7 @@ export default function DemoPage() {
       });
 
       if (response.ok) {
-        fetchUploads();
+        void fetchUploads();
         setFormData({ ...formData, userId: '', imageUrl: '' });
       }
     } catch (error) {
@@ -89,7 +89,7 @@ export default function DemoPage() {
       });
 
       if (response.ok) {
-        fetchUploads();
+        void fetchUploads();
         setFormData({ ...formData, aiQuestion: '', aiSolution: '' });
       }
     } catch (error) {
@@ -107,7 +107,7 @@ export default function DemoPage() {
       });
 
       if (response.ok) {
-        fetchUploads();
+        void fetchUploads();
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -117,7 +117,7 @@ export default function DemoPage() {
   };
 
   useEffect(() => {
-    fetchUploads();
+    void fetchUploads();
   }, []);
 
   return (
@@ -144,7 +144,7 @@ export default function DemoPage() {
               setFormData({ ...formData, imageUrl: e.target.value })
             }
           />
-          <Button onClick={createUpload} disabled={loading}>
+          <Button onClick={() => void createUpload()} disabled={loading}>
             {loading ? '创建中...' : '创建上传'}
           </Button>
         </CardContent>
@@ -197,7 +197,7 @@ export default function DemoPage() {
                 </div>
                 <Button
                   variant="destructive"
-                  onClick={() => deleteUpload(upload.user_uploads.id)}
+                  onClick={() => void deleteUpload(upload.user_uploads.id)}
                   disabled={loading}
                 >
                   删除
@@ -225,7 +225,7 @@ export default function DemoPage() {
               ) : (
                 <div className="mt-4">
                   <Button
-                    onClick={() => createAiResult(upload.user_uploads.id)}
+                    onClick={() => void createAiResult(upload.user_uploads.id)}
                     disabled={
                       loading || !formData.aiQuestion || !formData.aiSolution
                     }
@@ -247,3 +247,5 @@ export default function DemoPage() {
     </div>
   );
 }
+// Test comment
+// Test pre-commit after fix
