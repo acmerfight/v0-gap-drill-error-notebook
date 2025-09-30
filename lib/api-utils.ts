@@ -11,9 +11,7 @@ export interface ApiResponse<T = unknown> {
   };
 }
 
-export function createSuccessResponse<T>(
-  data: T
-): NextResponse<ApiResponse<T>> {
+export function createSuccessResponse<T>(data: T): NextResponse<ApiResponse<T>> {
   return NextResponse.json({
     success: true,
     data,
@@ -24,7 +22,7 @@ export function createErrorResponse(
   message: string,
   code: string = 'INTERNAL_ERROR',
   status: number = 500,
-  details?: unknown
+  details?: unknown,
 ): NextResponse<ApiResponse> {
   return NextResponse.json(
     {
@@ -35,7 +33,7 @@ export function createErrorResponse(
         details,
       },
     },
-    { status }
+    { status },
   );
 }
 
@@ -44,35 +42,18 @@ export function handleApiError(error: unknown): NextResponse<ApiResponse> {
   console.error('API Error:', error);
 
   if (error instanceof ZodError) {
-    return createErrorResponse(
-      'Invalid input data',
-      'VALIDATION_ERROR',
-      400,
-      error.issues
-    );
+    return createErrorResponse('Invalid input data', 'VALIDATION_ERROR', 400, error.issues);
   }
 
   if (error instanceof Error) {
     if (error.message.includes('unique constraint')) {
-      return createErrorResponse(
-        'Resource already exists',
-        'DUPLICATE_RESOURCE',
-        409
-      );
+      return createErrorResponse('Resource already exists', 'DUPLICATE_RESOURCE', 409);
     }
 
     if (error.message.includes('foreign key constraint')) {
-      return createErrorResponse(
-        'Referenced resource not found',
-        'INVALID_REFERENCE',
-        400
-      );
+      return createErrorResponse('Referenced resource not found', 'INVALID_REFERENCE', 400);
     }
   }
 
-  return createErrorResponse(
-    'An unexpected error occurred',
-    'INTERNAL_ERROR',
-    500
-  );
+  return createErrorResponse('An unexpected error occurred', 'INTERNAL_ERROR', 500);
 }

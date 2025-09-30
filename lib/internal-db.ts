@@ -26,9 +26,7 @@ async function getCurrentUserId(): Promise<string> {
 }
 
 // User Uploads CRUD Operations
-export async function createUpload(
-  data: Omit<NewUserUpload, 'userId'>
-): Promise<UserUpload> {
+export async function createUpload(data: Omit<NewUserUpload, 'userId'>): Promise<UserUpload> {
   const userId = await getCurrentUserId();
 
   const [newUpload] = await db
@@ -64,7 +62,7 @@ export async function getUploadById(id: string): Promise<UserUpload | null> {
 
 export async function updateUpload(
   id: string,
-  data: Partial<Omit<UserUpload, 'id' | 'userId' | 'createdAt'>>
+  data: Partial<Omit<UserUpload, 'id' | 'userId' | 'createdAt'>>,
 ): Promise<UserUpload | null> {
   const userId = await getCurrentUserId();
 
@@ -89,9 +87,7 @@ export async function deleteUpload(id: string): Promise<boolean> {
 }
 
 // AI Processing Results CRUD Operations
-export async function createAiResult(
-  data: NewAiProcessingResult
-): Promise<AiProcessingResult> {
+export async function createAiResult(data: NewAiProcessingResult): Promise<AiProcessingResult> {
   await getCurrentUserId(); // Verify user session
 
   // Verify the upload belongs to the current user
@@ -100,10 +96,7 @@ export async function createAiResult(
     throw new Error('Upload not found or access denied');
   }
 
-  const [newResult] = await db
-    .insert(aiProcessingResults)
-    .values(data)
-    .returning();
+  const [newResult] = await db.insert(aiProcessingResults).values(data).returning();
 
   return newResult;
 }
@@ -127,9 +120,7 @@ export async function getUserAiResults(): Promise<AiProcessingResult[]> {
   return results;
 }
 
-export async function getAiResultById(
-  id: string
-): Promise<AiProcessingResult | null> {
+export async function getAiResultById(id: string): Promise<AiProcessingResult | null> {
   const userId = await getCurrentUserId();
 
   const [result] = await db

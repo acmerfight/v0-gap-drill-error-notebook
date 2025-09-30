@@ -1,178 +1,194 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Edit3, Check, X, Save, BookOpen, Eye, FileText, CheckCircle, AlertTriangle } from "lucide-react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { detectLanguage, getTranslations, type Translations } from "@/lib/i18n"
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  ArrowLeft,
+  Edit3,
+  Check,
+  X,
+  Save,
+  BookOpen,
+  Eye,
+  FileText,
+  CheckCircle,
+  AlertTriangle,
+} from 'lucide-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { detectLanguage, getTranslations, type Translations } from '@/lib/i18n';
 
 interface RecognitionData {
-  question: string
-  userSolution?: string
+  question: string;
+  userSolution?: string;
 }
 
 function MathJaxRenderer({ content }: { content: string }) {
   useEffect(() => {
     // 重新渲染MathJax
-    if (typeof window !== "undefined" && window.MathJax && window.MathJax.typesetPromise) {
+    if (typeof window !== 'undefined' && window.MathJax && window.MathJax.typesetPromise) {
       window.MathJax.typesetPromise().catch((err: unknown) => {
         // Log MathJax rendering errors in development only
         if (process.env.NODE_ENV === 'development') {
           // eslint-disable-next-line no-console
-          console.error("MathJax rendering error:", err)
+          console.error('MathJax rendering error:', err);
         }
-      })
+      });
     }
-  }, [content])
+  }, [content]);
 
   // 简单的Markdown渲染
   const renderMarkdown = (text: string) => {
     return text
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*(.*?)\*/g, "<em>$1</em>")
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
       .replace(/`(.*?)`/g, '<code class="bg-muted px-1 py-0.5 rounded text-sm">$1</code>')
       .replace(/^### (.*$)/gim, '<h3 class="text-lg font-semibold mt-4 mb-2">$1</h3>')
       .replace(/^## (.*$)/gim, '<h2 class="text-xl font-semibold mt-4 mb-2">$1</h2>')
       .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-4 mb-2">$1</h1>')
-      .replace(/\n/g, "<br>")
-  }
+      .replace(/\n/g, '<br>');
+  };
 
-  return <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }} />
+  return (
+    <div
+      className="prose prose-sm max-w-none"
+      dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }}
+    />
+  );
 }
 
 export default function RecognitionResultPage() {
-  const [originalImage, setOriginalImage] = useState<string>("")
+  const [originalImage, setOriginalImage] = useState<string>('');
   const [recognitionData, setRecognitionData] = useState<RecognitionData>({
-    question: "",
-    userSolution: "",
-  })
-  const [editingQuestion, setEditingQuestion] = useState(false)
-  const [editingSolution, setEditingSolution] = useState(false)
-  const [questionText, setQuestionText] = useState("")
-  const [solutionText, setSolutionText] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
-  const [previewQuestion, setPreviewQuestion] = useState(false)
-  const [previewSolution, setPreviewSolution] = useState(false)
-  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "success" | "error">("idle")
-  const router = useRouter()
+    question: '',
+    userSolution: '',
+  });
+  const [editingQuestion, setEditingQuestion] = useState(false);
+  const [editingSolution, setEditingSolution] = useState(false);
+  const [questionText, setQuestionText] = useState('');
+  const [solutionText, setSolutionText] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [previewQuestion, setPreviewQuestion] = useState(false);
+  const [previewSolution, setPreviewSolution] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+  const router = useRouter();
 
-  const [, setCurrentLang] = useState<"zh" | "en">("zh")
-  const [t, setT] = useState<Translations>(getTranslations("zh"))
+  const [, setCurrentLang] = useState<'zh' | 'en'>('zh');
+  const [t, setT] = useState<Translations>(getTranslations('zh'));
 
   useEffect(() => {
-    const detectedLang = detectLanguage()
-    setCurrentLang(detectedLang)
-    setT(getTranslations(detectedLang))
+    const detectedLang = detectLanguage();
+    setCurrentLang(detectedLang);
+    setT(getTranslations(detectedLang));
 
     // 从 sessionStorage 获取上传的图片
-    const uploadedImage = sessionStorage.getItem("uploadedImage")
+    const uploadedImage = sessionStorage.getItem('uploadedImage');
     if (uploadedImage) {
-      setOriginalImage(uploadedImage)
+      setOriginalImage(uploadedImage);
       // 模拟AI识别过程
-      simulateAIRecognition()
+      simulateAIRecognition();
     } else {
       // 如果没有图片数据，返回首页
-      router.push("/")
+      router.push('/');
     }
-  }, [router])
+  }, [router]);
 
   const simulateAIRecognition = () => {
     // 模拟AI识别延迟
     setTimeout(() => {
       const mockRecognition: RecognitionData = {
         question:
-          "已知函数 $f(x) = 2x^2 - 4x + 1$，求函数的**最小值**。\n\n### 提示\n- 可以使用配方法\n- 注意二次函数的性质",
+          '已知函数 $f(x) = 2x^2 - 4x + 1$，求函数的**最小值**。\n\n### 提示\n- 可以使用配方法\n- 注意二次函数的性质',
         userSolution:
-          "## 解题过程\n\n**解：** $f(x) = 2x^2 - 4x + 1$\n\n### 步骤1：配方\n$f(x) = 2(x^2 - 2x) + 1$\n\n### 步骤2：完成配方\n$f(x) = 2(x - 1)^2 - 2 + 1$\n\n### 步骤3：化简\n$f(x) = 2(x - 1)^2 - 1$\n\n### 结论\n所以函数的**最小值**为 $-1$，当 $x = 1$ 时取得。",
-      }
-      setRecognitionData(mockRecognition)
-      setQuestionText(mockRecognition.question)
-      setSolutionText(mockRecognition.userSolution || "")
-      setIsLoading(false)
-    }, 2000)
-  }
+          '## 解题过程\n\n**解：** $f(x) = 2x^2 - 4x + 1$\n\n### 步骤1：配方\n$f(x) = 2(x^2 - 2x) + 1$\n\n### 步骤2：完成配方\n$f(x) = 2(x - 1)^2 - 2 + 1$\n\n### 步骤3：化简\n$f(x) = 2(x - 1)^2 - 1$\n\n### 结论\n所以函数的**最小值**为 $-1$，当 $x = 1$ 时取得。',
+      };
+      setRecognitionData(mockRecognition);
+      setQuestionText(mockRecognition.question);
+      setSolutionText(mockRecognition.userSolution || '');
+      setIsLoading(false);
+    }, 2000);
+  };
 
   const handleBack = () => {
-    sessionStorage.removeItem("uploadedImage")
-    router.push("/")
-  }
+    sessionStorage.removeItem('uploadedImage');
+    router.push('/');
+  };
 
   const startEditingQuestion = () => {
-    setEditingQuestion(true)
-    setPreviewQuestion(false)
-  }
+    setEditingQuestion(true);
+    setPreviewQuestion(false);
+  };
 
   const saveQuestion = () => {
-    setRecognitionData((prev) => ({ ...prev, question: questionText }))
-    setEditingQuestion(false)
-    setPreviewQuestion(false)
-  }
+    setRecognitionData((prev) => ({ ...prev, question: questionText }));
+    setEditingQuestion(false);
+    setPreviewQuestion(false);
+  };
 
   const cancelEditingQuestion = () => {
-    setQuestionText(recognitionData.question)
-    setEditingQuestion(false)
-    setPreviewQuestion(false)
-  }
+    setQuestionText(recognitionData.question);
+    setEditingQuestion(false);
+    setPreviewQuestion(false);
+  };
 
   const startEditingSolution = () => {
-    setEditingSolution(true)
-    setPreviewSolution(false)
-  }
+    setEditingSolution(true);
+    setPreviewSolution(false);
+  };
 
   const saveSolution = () => {
-    setRecognitionData((prev) => ({ ...prev, userSolution: solutionText }))
-    setEditingSolution(false)
-    setPreviewSolution(false)
-  }
+    setRecognitionData((prev) => ({ ...prev, userSolution: solutionText }));
+    setEditingSolution(false);
+    setPreviewSolution(false);
+  };
 
   const cancelEditingSolution = () => {
-    setSolutionText(recognitionData.userSolution || "")
-    setEditingSolution(false)
-    setPreviewSolution(false)
-  }
+    setSolutionText(recognitionData.userSolution || '');
+    setEditingSolution(false);
+    setPreviewSolution(false);
+  };
 
   const handleSaveToLibrary = () => {
-    setSaveStatus("saving")
+    setSaveStatus('saving');
 
     // 模拟保存过程
     setTimeout(() => {
       // Save to error collection - logged in development only
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
-        console.log("保存到错题库:", recognitionData)
+        console.log('保存到错题库:', recognitionData);
       }
-      setSaveStatus("success")
+      setSaveStatus('success');
 
       setTimeout(() => {
-        sessionStorage.removeItem("uploadedImage")
-        router.push("/")
-      }, 1500)
-    }, 2000)
-  }
+        sessionStorage.removeItem('uploadedImage');
+        router.push('/');
+      }, 1500);
+    }, 2000);
+  };
 
   const SaveStatusIndicator = () => {
-    if (saveStatus === "saving") {
+    if (saveStatus === 'saving') {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-primary text-primary-foreground px-4 py-2 rounded-full shadow-lg elevation-2 flex items-center gap-2">
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
           <span className="text-sm font-medium">{t.saving}</span>
         </div>
-      )
+      );
     }
 
-    if (saveStatus === "success") {
+    if (saveStatus === 'success') {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white px-4 py-2 rounded-full shadow-lg elevation-2 flex items-center gap-2">
           <CheckCircle className="h-4 w-4" />
           <span className="text-sm font-medium">{t.saveSuccess}</span>
         </div>
-      )
+      );
     }
 
-    return null
-  }
+    return null;
+  };
 
   if (isLoading) {
     return (
@@ -186,11 +202,14 @@ export default function RecognitionResultPage() {
           <h2 className="text-xl font-semibold text-foreground mb-2">{t.aiRecognizing}</h2>
           <p className="text-muted-foreground">{t.pleaseWait}</p>
           <div className="mt-4 w-full bg-muted rounded-full h-2">
-            <div className="bg-primary h-2 rounded-full animate-pulse" style={{ width: "60%" }}></div>
+            <div
+              className="bg-primary h-2 rounded-full animate-pulse"
+              style={{ width: '60%' }}
+            ></div>
           </div>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -212,11 +231,11 @@ export default function RecognitionResultPage() {
           </div>
           <Button
             onClick={handleSaveToLibrary}
-            disabled={saveStatus === "saving"}
+            disabled={saveStatus === 'saving'}
             className="bg-primary hover:bg-primary/90 text-sm px-4 elevation-1 transition-elevation hover:elevation-2"
           >
             <Save className="mr-2 h-4 w-4" />
-            {saveStatus === "saving" ? t.saving : t.saveToLibrary}
+            {saveStatus === 'saving' ? t.saving : t.saveToLibrary}
           </Button>
         </div>
       </header>
@@ -236,7 +255,7 @@ export default function RecognitionResultPage() {
             <CardContent className="pt-0">
               <div className="flex justify-center p-4 bg-muted/30 rounded-lg">
                 <Image
-                  src={originalImage || "/placeholder.svg"}
+                  src={originalImage || '/placeholder.svg'}
                   alt="错题原图"
                   width={800}
                   height={600}
@@ -415,7 +434,9 @@ export default function RecognitionResultPage() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground mb-2">{t.confirmResult}</h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{t.confirmResultDesc}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {t.confirmResultDesc}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -423,5 +444,5 @@ export default function RecognitionResultPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }

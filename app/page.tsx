@@ -24,20 +24,14 @@ import {
   Play,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-  useUser,
-} from '@clerk/nextjs';
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import { detectLanguage, getTranslations, type Translations } from '@/lib/i18n';
 
 export default function HomePage() {
   const [dragActive, setDragActive] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState<
-    'idle' | 'uploading' | 'success' | 'error'
-  >('idle');
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>(
+    'idle',
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { isLoaded } = useUser();
@@ -165,19 +159,13 @@ export default function HomePage() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-primary">{t.appName}</h1>
-              <p className="text-sm text-muted-foreground font-medium">
-                {t.appSubtitle}
-              </p>
+              <p className="text-sm text-muted-foreground font-medium">{t.appSubtitle}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <SignedIn>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative hover:bg-primary/10"
-              >
+              <Button variant="ghost" size="icon" className="relative hover:bg-primary/10">
                 <Bell className="h-5 w-5 text-muted-foreground" />
                 <span className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full border-2 border-background"></span>
               </Button>
@@ -201,11 +189,7 @@ export default function HomePage() {
               <p className="text-muted-foreground text-xl text-pretty max-w-2xl mx-auto leading-relaxed mb-8">
                 {t.heroSubtitle}
               </p>
-              <SignInButton
-                mode="modal"
-                forceRedirectUrl="/"
-                signUpForceRedirectUrl="/"
-              >
+              <SignInButton mode="modal" forceRedirectUrl="/" signUpForceRedirectUrl="/">
                 <Button
                   size="lg"
                   className="gradient-primary hover:opacity-90 text-primary-foreground h-16 text-xl font-semibold elevation-3 transition-elevation hover:elevation-4 rounded-2xl px-12"
@@ -221,9 +205,7 @@ export default function HomePage() {
           {/* Core Value Section */}
           <section className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                {t.coreValueTitle}
-              </h2>
+              <h2 className="text-3xl font-bold text-foreground mb-4">{t.coreValueTitle}</h2>
               <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
                 {t.coreValueDesc}
               </p>
@@ -233,45 +215,31 @@ export default function HomePage() {
           {/* How It Works Section */}
           <section className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                {t.howItWorksTitle}
-              </h2>
+              <h2 className="text-3xl font-bold text-foreground mb-4">{t.howItWorksTitle}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
               <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-feature border border-border rounded-2xl text-center">
                 <div className="p-6 bg-primary/10 rounded-3xl inline-flex mb-6">
                   <Camera className="h-12 w-12 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">
-                  {t.step1Title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {t.step1Desc}
-                </p>
+                <h3 className="text-xl font-bold text-foreground mb-4">{t.step1Title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{t.step1Desc}</p>
               </Card>
 
               <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-feature border border-border rounded-2xl text-center">
                 <div className="p-6 bg-accent/10 rounded-3xl inline-flex mb-6">
                   <Brain className="h-12 w-12 text-accent" />
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">
-                  {t.step2Title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {t.step2Desc}
-                </p>
+                <h3 className="text-xl font-bold text-foreground mb-4">{t.step2Title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{t.step2Desc}</p>
               </Card>
 
               <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-feature border border-border rounded-2xl text-center">
                 <div className="p-6 bg-chart-2/10 rounded-3xl inline-flex mb-6">
                   <Target className="h-12 w-12 text-chart-2" />
                 </div>
-                <h3 className="text-xl font-bold text-foreground mb-4">
-                  {t.step3Title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {t.step3Desc}
-                </p>
+                <h3 className="text-xl font-bold text-foreground mb-4">{t.step3Title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{t.step3Desc}</p>
               </Card>
             </div>
           </section>
@@ -279,9 +247,7 @@ export default function HomePage() {
           {/* Why Choose Us Section */}
           <section className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">
-                {t.whyChooseTitle}
-              </h2>
+              <h2 className="text-3xl font-bold text-foreground mb-4">{t.whyChooseTitle}</h2>
             </div>
             <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
               <Card className="p-8 elevation-2 transition-elevation hover:elevation-3 gradient-card border border-border rounded-2xl">
@@ -290,9 +256,7 @@ export default function HomePage() {
                     <Sparkles className="h-10 w-10 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-foreground mb-3">
-                      {t.aiPoweredTitle}
-                    </h3>
+                    <h3 className="text-2xl font-bold text-foreground mb-3">{t.aiPoweredTitle}</h3>
                     <p className="text-muted-foreground leading-relaxed text-lg">
                       {t.aiPoweredDesc}
                     </p>
@@ -341,17 +305,9 @@ export default function HomePage() {
                 <div className="p-6 bg-white/20 rounded-3xl inline-flex mb-6">
                   <Award className="h-16 w-16 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold text-white mb-4">
-                  {t.getStarted}
-                </h3>
-                <p className="text-white/90 mb-8 text-lg leading-relaxed">
-                  {t.pleaseLogin}
-                </p>
-                <SignInButton
-                  mode="modal"
-                  forceRedirectUrl="/"
-                  signUpForceRedirectUrl="/"
-                >
+                <h3 className="text-3xl font-bold text-white mb-4">{t.getStarted}</h3>
+                <p className="text-white/90 mb-8 text-lg leading-relaxed">{t.pleaseLogin}</p>
+                <SignInButton mode="modal" forceRedirectUrl="/" signUpForceRedirectUrl="/">
                   <Button
                     size="lg"
                     variant="secondary"
@@ -380,9 +336,7 @@ export default function HomePage() {
             <CardContent className="p-0">
               <div
                 className={`text-center p-10 transition-all duration-300 ${
-                  dragActive
-                    ? 'bg-primary/10 border-primary/30 scale-[1.02]'
-                    : ''
+                  dragActive ? 'bg-primary/10 border-primary/30 scale-[1.02]' : ''
                 } ${uploadStatus === 'uploading' ? 'opacity-50 pointer-events-none' : ''}`}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
@@ -395,16 +349,12 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <h3 className="text-2xl font-bold text-card-foreground mb-3">
-                  {t.uploadTitle}
-                </h3>
+                <h3 className="text-2xl font-bold text-card-foreground mb-3">{t.uploadTitle}</h3>
                 <p className="text-muted-foreground mb-10 text-lg max-w-md mx-auto leading-relaxed">
                   {t.uploadSubtitle.split('\n').map((line, index) => (
                     <span key={line}>
                       {line}
-                      {index < t.uploadSubtitle.split('\n').length - 1 && (
-                        <br />
-                      )}
+                      {index < t.uploadSubtitle.split('\n').length - 1 && <br />}
                     </span>
                   ))}
                 </p>
@@ -417,9 +367,7 @@ export default function HomePage() {
                     size="lg"
                   >
                     <Camera className="mr-3 h-6 w-6" />
-                    {uploadStatus === 'uploading'
-                      ? t.aiProcessing
-                      : t.takePhoto}
+                    {uploadStatus === 'uploading' ? t.aiProcessing : t.takePhoto}
                   </Button>
 
                   <Button

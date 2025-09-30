@@ -5,30 +5,30 @@
 declare global {
   interface Window {
     MathJax?: {
-      typesetPromise?: () => Promise<void>
+      typesetPromise?: () => Promise<void>;
       startup?: {
-        defaultReady: () => void
+        defaultReady: () => void;
         document: {
           menu: {
             settings: {
-              renderer: string
-            }
-          }
-        }
-      }
+              renderer: string;
+            };
+          };
+        };
+      };
       tex?: {
-        inlineMath?: [string, string][]
-        displayMath?: [string, string][]
-        processEscapes?: boolean
-        processEnvironments?: boolean
-      }
+        inlineMath?: [string, string][];
+        displayMath?: [string, string][];
+        processEscapes?: boolean;
+        processEnvironments?: boolean;
+      };
       options?: {
-        skipHtmlTags?: string[]
-        ignoreHtmlClass?: string
-        processHtmlClass?: string
-      }
-    }
+        skipHtmlTags?: string[];
+        ignoreHtmlClass?: string;
+        processHtmlClass?: string;
+      };
+    };
   }
 }
 
-export {}
+export {};

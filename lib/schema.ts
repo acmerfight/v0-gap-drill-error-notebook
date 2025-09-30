@@ -10,7 +10,9 @@ export const userUploads = pgTable('user_uploads', {
 });
 
 export const aiProcessingResults = pgTable('ai_processing_results', {
-  id: uuid('id').primaryKey().references(() => userUploads.id, { onDelete: 'cascade' }),
+  id: uuid('id')
+    .primaryKey()
+    .references(() => userUploads.id, { onDelete: 'cascade' }),
   aiQuestion: text('ai_question').notNull(),
   aiSolution: text('ai_solution').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
