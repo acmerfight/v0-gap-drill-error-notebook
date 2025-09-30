@@ -56,8 +56,9 @@ module.exports = [
         "eqeqeq": ["error", "always"],
         "curly": ["error", "all"],
         
-        // Unused variables with underscore prefix allowance
-        "no-unused-vars": ["error", {
+        // Unused variables with underscore prefix allowance (TypeScript version)
+        "no-unused-vars": "off", // Turn off base rule
+        "@typescript-eslint/no-unused-vars": ["error", {
             "argsIgnorePattern": "^_",
             "varsIgnorePattern": "^_",
             "ignoreRestSiblings": true
@@ -71,6 +72,8 @@ module.exports = [
         
         // TypeScript specific rules
         "@typescript-eslint/no-unsafe-assignment": "error",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/consistent-type-imports": "error",
 
         // Async/Promise safety rules (Critical for production)
         "@typescript-eslint/no-floating-promises": "error",
