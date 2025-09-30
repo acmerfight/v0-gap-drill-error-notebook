@@ -27,8 +27,8 @@
   "packageManager": "pnpm@10.15.1",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix --cache",
-      "eslint --max-warnings 0 --cache",
+      "eslint --fix --cache --no-warn-ignored",
+      "eslint --max-warnings 0 --cache --no-warn-ignored",
       "bash -c 'rm -rf node_modules/.cache tsconfig.tsbuildinfo .next/cache && npx tsc --noEmit'",
       "prettier --write"
     ],

@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { db } from '@/lib/db'
 import {
   userUploads,
   aiProcessingResults,
@@ -6,9 +6,9 @@ import {
   type NewUserUpload,
   type AiProcessingResult,
   type NewAiProcessingResult,
-} from '@/lib/schema';
-import { eq, desc, and } from 'drizzle-orm';
-import { auth } from '@clerk/nextjs/server';
+} from '@/lib/schema'
+import { eq, desc, and } from 'drizzle-orm'
+import { auth } from '@clerk/nextjs/server'
 
 /**
  * Internal database operations - Server-side only
@@ -17,99 +17,99 @@ import { auth } from '@clerk/nextjs/server';
  */
 
 async function getCurrentUserId(): Promise<string> {
-  const { userId } = await auth();
+  const { userId } = await auth()
   // Middleware ensures user is authenticated, but we still check for safety
   if (!userId) {
-    throw new Error('User session not found');
+    throw new Error('User session not found')
   }
-  return userId;
+  return userId
 }
 
 // User Uploads CRUD Operations
 export async function createUpload(
-  data: Omit<NewUserUpload, 'userId'>
+  data: Omit<NewUserUpload, 'userId'>,
 ): Promise<UserUpload> {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserId()
 
   const [newUpload] = await db
     .insert(userUploads)
     .values({ ...data, userId })
-    .returning();
+    .returning()
 
-  return newUpload;
+  return newUpload
 }
 
 export async function getUserUploads(): Promise<UserUpload[]> {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserId()
 
   const uploads = await db
     .select()
     .from(userUploads)
     .where(eq(userUploads.userId, userId))
-    .orderBy(desc(userUploads.createdAt));
+    .orderBy(desc(userUploads.createdAt))
 
-  return uploads;
+  return uploads
 }
 
 export async function getUploadById(id: string): Promise<UserUpload | null> {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserId()
 
   const [upload] = await db
     .select()
     .from(userUploads)
-    .where(and(eq(userUploads.id, id), eq(userUploads.userId, userId)));
+    .where(and(eq(userUploads.id, id), eq(userUploads.userId, userId)))
 
-  return upload || null;
+  return upload || null
 }
 
 export async function updateUpload(
   id: string,
-  data: Partial<Omit<UserUpload, 'id' | 'userId' | 'createdAt'>>
+  data: Partial<Omit<UserUpload, 'id' | 'userId' | 'createdAt'>>,
 ): Promise<UserUpload | null> {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserId()
 
   const [updatedUpload] = await db
     .update(userUploads)
     .set({ ...data, updatedAt: new Date() })
     .where(and(eq(userUploads.id, id), eq(userUploads.userId, userId)))
-    .returning();
+    .returning()
 
-  return updatedUpload || null;
+  return updatedUpload || null
 }
 
 export async function deleteUpload(id: string): Promise<boolean> {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserId()
 
   const [deletedUpload] = await db
     .delete(userUploads)
     .where(and(eq(userUploads.id, id), eq(userUploads.userId, userId)))
-    .returning();
+    .returning()
 
-  return !!deletedUpload;
+  return !!deletedUpload
 }
 
 // AI Processing Results CRUD Operations
 export async function createAiResult(
-  data: NewAiProcessingResult
+  data: NewAiProcessingResult,
 ): Promise<AiProcessingResult> {
-  await getCurrentUserId(); // Verify user session
+  await getCurrentUserId() // Verify user session
 
   // Verify the upload belongs to the current user
-  const upload = await getUploadById(data.id);
+  const upload = await getUploadById(data.id)
   if (!upload) {
-    throw new Error('Upload not found or access denied');
+    throw new Error('Upload not found or access denied')
   }
 
   const [newResult] = await db
     .insert(aiProcessingResults)
     .values(data)
-    .returning();
+    .returning()
 
-  return newResult;
+  return newResult
 }
 
 export async function getUserAiResults(): Promise<AiProcessingResult[]> {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserId()
 
   const results = await db
     .select({
@@ -122,15 +122,15 @@ export async function getUserAiResults(): Promise<AiProcessingResult[]> {
     .from(aiProcessingResults)
     .leftJoin(userUploads, eq(aiProcessingResults.id, userUploads.id))
     .where(eq(userUploads.userId, userId))
-    .orderBy(desc(aiProcessingResults.createdAt));
+    .orderBy(desc(aiProcessingResults.createdAt))
 
-  return results;
+  return results
 }
 
 export async function getAiResultById(
-  id: string
+  id: string,
 ): Promise<AiProcessingResult | null> {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserId()
 
   const [result] = await db
     .select({
@@ -142,33 +142,33 @@ export async function getAiResultById(
     })
     .from(aiProcessingResults)
     .leftJoin(userUploads, eq(aiProcessingResults.id, userUploads.id))
-    .where(and(eq(aiProcessingResults.id, id), eq(userUploads.userId, userId)));
+    .where(and(eq(aiProcessingResults.id, id), eq(userUploads.userId, userId)))
 
-  return result || null;
+  return result || null
 }
 
 // Combined operations for convenience
 export async function getUploadWithAiResult(id: string) {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserId()
 
   const [result] = await db
     .select()
     .from(userUploads)
     .leftJoin(aiProcessingResults, eq(userUploads.id, aiProcessingResults.id))
-    .where(and(eq(userUploads.id, id), eq(userUploads.userId, userId)));
+    .where(and(eq(userUploads.id, id), eq(userUploads.userId, userId)))
 
-  return result || null;
+  return result || null
 }
 
 export async function getAllUserDataWithResults() {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserId()
 
   const results = await db
     .select()
     .from(userUploads)
     .leftJoin(aiProcessingResults, eq(userUploads.id, aiProcessingResults.id))
     .where(eq(userUploads.userId, userId))
-    .orderBy(desc(userUploads.createdAt));
+    .orderBy(desc(userUploads.createdAt))
 
-  return results;
+  return results
 }
