@@ -80,6 +80,7 @@ const config = [
 
       // TypeScript specific rules
       '@typescript-eslint/no-unsafe-assignment': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
 
       // Async/Promise safety rules (Critical for production)
       '@typescript-eslint/no-floating-promises': 'error',
