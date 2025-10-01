@@ -88,7 +88,7 @@ export default function RecognitionResultPage() {
       }
       setRecognitionData(mockRecognition)
       setQuestionText(mockRecognition.question)
-      setSolutionText(mockRecognition.userSolution || '')
+      setSolutionText(mockRecognition.userSolution ?? '')
       setIsLoading(false)
     }, 2000)
   }
@@ -127,7 +127,7 @@ export default function RecognitionResultPage() {
   }
 
   const cancelEditingSolution = () => {
-    setSolutionText(recognitionData.userSolution || '')
+    setSolutionText(recognitionData.userSolution ?? '')
     setEditingSolution(false)
     setPreviewSolution(false)
   }
