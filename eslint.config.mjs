@@ -63,7 +63,8 @@ const config = [
       curly: ['error', 'all'],
 
       // Unused variables with underscore prefix allowance
-      'no-unused-vars': [
+      'no-unused-vars': 'off', // Disable base rule for TypeScript
+      '@typescript-eslint/no-unused-vars': [
         'error',
         {
           argsIgnorePattern: '^_',
