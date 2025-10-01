@@ -28,6 +28,7 @@ const config = [
       '**/types/**',
       'next.config.mjs',
       'postcss.config.mjs',
+      'eslint.config.mjs',
     ],
   },
 
