@@ -331,10 +331,10 @@ export default function HomePage() {
 
                 <h3 className="text-2xl font-bold text-card-foreground mb-3">{t.uploadTitle}</h3>
                 <p className="text-muted-foreground mb-10 text-lg max-w-md mx-auto leading-relaxed">
-                  {t.uploadSubtitle.split('\n').map((line, index) => (
-                    <span key={index}>
+                  {t.uploadSubtitle.split('\n').map((line, index, array) => (
+                    <span key={`upload-subtitle-${line}`}>
                       {line}
-                      {index < t.uploadSubtitle.split('\n').length - 1 && <br />}
+                      {index < array.length - 1 && <br />}
                     </span>
                   ))}
                 </p>

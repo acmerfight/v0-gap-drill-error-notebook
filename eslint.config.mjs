@@ -80,6 +80,8 @@ const config = [
 
       // TypeScript specific rules
       '@typescript-eslint/no-unsafe-assignment': 'error',
+      '@typescript-eslint/no-unsafe-call': 'error',
+      '@typescript-eslint/no-unsafe-member-access': 'error',
 
       // Async/Promise safety rules (Critical for production)
       '@typescript-eslint/no-floating-promises': 'error',
@@ -91,6 +93,7 @@ const config = [
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react-hooks/exhaustive-deps': 'warn',
+      'react/no-array-index-key': 'error',
 
       // React security rules
       'react/jsx-no-target-blank': 'error',
