@@ -35,12 +35,64 @@ const config = [
   // Base configuration
   js.configs.recommended,
 
-  // Next.js specific rules
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  // Next.js core web vitals (applies to all files)
+  ...compat.extends('next/core-web-vitals'),
 
-  // Custom rules for all files
+  // Base rules for all JavaScript files
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ['**/*.{js,jsx}'],
+    languageOptions: {
+      ecmaVersion: 2024,
+      sourceType: 'module',
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+    rules: {
+      // Core quality rules
+      'prefer-const': 'error',
+      'no-var': 'error',
+      'no-console': 'warn',
+      'no-debugger': 'error',
+      eqeqeq: ['error', 'always'],
+      curly: ['error', 'all'],
+
+      // Standard unused variables rule for JS
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+
+      // Security rules
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
+      'no-new-func': 'error',
+      'no-script-url': 'error',
+      'require-await': 'error',
+
+      // React rules for JSX
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/exhaustive-deps': 'warn',
+      'react/jsx-no-target-blank': 'error',
+    },
+  },
+
+  // Next.js TypeScript rules (only for TypeScript files)
+  ...compat.extends('next/typescript').map(config => ({
+    ...config,
+    files: ['**/*.{ts,tsx}'],
+  })),
+
+  // TypeScript specific rules
+  {
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2024,
       sourceType: 'module',
@@ -53,7 +105,6 @@ const config = [
         tsconfigRootDir: __dirname,
       },
     },
-
     rules: {
       // Core quality rules
       'prefer-const': 'error',
@@ -63,8 +114,8 @@ const config = [
       eqeqeq: ['error', 'always'],
       curly: ['error', 'all'],
 
-      // Unused variables with underscore prefix allowance
-      'no-unused-vars': 'off', // Disable base rule for TypeScript
+      // TypeScript unused variables (disable base rule)
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -91,12 +142,10 @@ const config = [
       '@typescript-eslint/no-misused-promises': 'error',
       'require-await': 'error',
 
-      // React rules
+      // React rules for TSX
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react-hooks/exhaustive-deps': 'warn',
-
-      // React security rules
       'react/jsx-no-target-blank': 'error',
     },
   },
