@@ -58,7 +58,7 @@ export default function HomePage() {
     e.stopPropagation()
     setDragActive(false)
 
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    if (e.dataTransfer.files?.[0]) {
       handleFiles(e.dataTransfer.files)
     }
   }
