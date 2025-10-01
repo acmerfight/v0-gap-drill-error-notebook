@@ -63,7 +63,8 @@ const config = [
       curly: ['error', 'all'],
 
       // Unused variables with underscore prefix allowance
-      'no-unused-vars': [
+      'no-unused-vars': 'off', // Disable base rule for TypeScript
+      '@typescript-eslint/no-unused-vars': [
         'error',
         {
           argsIgnorePattern: '^_',
@@ -80,6 +81,8 @@ const config = [
 
       // TypeScript specific rules
       '@typescript-eslint/no-unsafe-assignment': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unsafe-member-access': 'error',
 
       // Async/Promise safety rules (Critical for production)
       '@typescript-eslint/no-floating-promises': 'error',
