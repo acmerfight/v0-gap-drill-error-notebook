@@ -1,5 +1,11 @@
-const { FlatCompat } = require("@eslint/eslintrc");
-const js = require("@eslint/js");
+import { FlatCompat } from "@eslint/eslintrc";
+import js from "@eslint/js";
+import tsParser from "@typescript-eslint/parser";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const compat = new FlatCompat({
     baseDirectory: __dirname,
@@ -7,7 +13,7 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-module.exports = [
+const config = [
     // Consolidated ignore patterns
     {
         ignores: [
@@ -19,9 +25,9 @@ module.exports = [
             "**/dist/**",
             "**/.vercel/**",
             "**/coverage/**",
-            "**/types/**",
-            "**/*.config.js",
-            "**/*.config.mjs",
+            "types/**",
+            "next.config.mjs",
+            "postcss.config.mjs",
         ],
     },
     
@@ -37,12 +43,12 @@ module.exports = [
     languageOptions: {
         ecmaVersion: 2024,
         sourceType: "module",
-        parser: require("@typescript-eslint/parser"),
+        parser: tsParser,
         parserOptions: {
             ecmaFeatures: {
                 jsx: true,
             },
-            project: "./tsconfig.json",
+            project: "./tsconfig.eslint.json",
             tsconfigRootDir: __dirname,
         },
     },
@@ -87,3 +93,5 @@ module.exports = [
         "react/jsx-no-target-blank": "error",
     },
 }];
+
+export default config;
