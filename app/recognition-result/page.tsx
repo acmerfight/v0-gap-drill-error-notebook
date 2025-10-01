@@ -16,7 +16,7 @@ interface RecognitionData {
 function MathJaxRenderer({ content }: { content: string }) {
   useEffect(() => {
     // 重新渲染MathJax
-    if (typeof window !== 'undefined' && window.MathJax && window.MathJax.typesetPromise) {
+    if (typeof window !== 'undefined' && window.MathJax?.typesetPromise) {
       window.MathJax.typesetPromise().catch((err: unknown) => {
         // Log MathJax rendering errors in development only
         if (process.env.NODE_ENV === 'development') {
@@ -88,7 +88,7 @@ export default function RecognitionResultPage() {
       }
       setRecognitionData(mockRecognition)
       setQuestionText(mockRecognition.question)
-      setSolutionText(mockRecognition.userSolution || '')
+      setSolutionText(mockRecognition.userSolution ?? '')
       setIsLoading(false)
     }, 2000)
   }
@@ -127,7 +127,7 @@ export default function RecognitionResultPage() {
   }
 
   const cancelEditingSolution = () => {
-    setSolutionText(recognitionData.userSolution || '')
+    setSolutionText(recognitionData.userSolution ?? '')
     setEditingSolution(false)
     setPreviewSolution(false)
   }

@@ -135,6 +135,12 @@ const config = [
       '@typescript-eslint/no-unsafe-assignment': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unsafe-member-access': 'error',
+      '@typescript-eslint/no-unsafe-call': 'error',
+      '@typescript-eslint/no-unsafe-argument': 'error',
+      '@typescript-eslint/no-unsafe-return': 'error',
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/consistent-type-imports': 'error',
 
       // Async/Promise safety rules (Critical for production)
       '@typescript-eslint/no-floating-promises': 'error',
