@@ -135,6 +135,7 @@ const config = [
       '@typescript-eslint/no-unsafe-assignment': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unsafe-member-access': 'error',
+      '@typescript-eslint/no-unsafe-call': 'error',
 
       // Async/Promise safety rules (Critical for production)
       '@typescript-eslint/no-floating-promises': 'error',
