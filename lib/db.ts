@@ -1,9 +1,9 @@
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http'
+import { neon } from '@neondatabase/serverless'
 
 if (!process.env.POSTGRES_URL) {
-  throw new Error('POSTGRES_URL environment variable is required');
+  throw new Error('POSTGRES_URL environment variable is required')
 }
 
-const sql = neon(process.env.POSTGRES_URL);
-export const db = drizzle({ client: sql });
+const sql = neon(process.env.POSTGRES_URL)
+export const db = drizzle({ client: sql })
