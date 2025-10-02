@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import type React from "react"
-import { useState, useRef, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import type React from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Camera,
   Upload,
@@ -22,20 +22,20 @@ import {
   Award,
   ArrowRight,
   Play,
-} from "lucide-react"
-import { useRouter } from "next/navigation"
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs"
-import { detectLanguage, getTranslations, type Translations } from "@/lib/i18n"
+} from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/nextjs'
+import { detectLanguage, getTranslations, type Translations } from '@/lib/i18n'
 
 export default function HomePage() {
   const [dragActive, setDragActive] = useState(false)
-  const [uploadStatus, setUploadStatus] = useState<"idle" | "uploading" | "success" | "error">("idle")
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
   const { isLoaded } = useUser()
 
-  const [, setCurrentLang] = useState<"zh" | "en">("zh")
-  const [t, setT] = useState<Translations>(getTranslations("zh"))
+  const [, setCurrentLang] = useState<'zh' | 'en'>('zh')
+  const [t, setT] = useState<Translations>(getTranslations('zh'))
 
   useEffect(() => {
     const detectedLang = detectLanguage()
@@ -46,9 +46,9 @@ export default function HomePage() {
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    if (e.type === "dragenter" || e.type === "dragover") {
+    if (e.type === 'dragenter' || e.type === 'dragover') {
       setDragActive(true)
-    } else if (e.type === "dragleave") {
+    } else if (e.type === 'dragleave') {
       setDragActive(false)
     }
   }
@@ -58,7 +58,7 @@ export default function HomePage() {
     e.stopPropagation()
     setDragActive(false)
 
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    if (e.dataTransfer.files?.[0]) {
       handleFiles(e.dataTransfer.files)
     }
   }
@@ -66,33 +66,33 @@ export default function HomePage() {
   const handleFiles = (files: FileList) => {
     const file = files[0]
     if (file) {
-      setUploadStatus("uploading")
+      setUploadStatus('uploading')
 
       const reader = new FileReader()
       reader.onload = (e) => {
         const imageData = e.target?.result as string
-        sessionStorage.setItem("uploadedImage", imageData)
-        setUploadStatus("success")
+        sessionStorage.setItem('uploadedImage', imageData)
+        setUploadStatus('success')
 
         setTimeout(() => {
-          router.push("/recognition-result")
+          router.push('/recognition-result')
         }, 800)
       }
       reader.onerror = () => {
-        setUploadStatus("error")
-        setTimeout(() => setUploadStatus("idle"), 3000)
+        setUploadStatus('error')
+        setTimeout(() => setUploadStatus('idle'), 3000)
       }
       reader.readAsDataURL(file)
     }
   }
 
   const openCamera = () => {
-    setUploadStatus("uploading")
+    setUploadStatus('uploading')
     // 模拟相机拍照过程
     setTimeout(() => {
-      setUploadStatus("success")
+      setUploadStatus('success')
       setTimeout(() => {
-        router.push("/recognition-result")
+        router.push('/recognition-result')
       }, 800)
     }, 1500)
   }
@@ -104,7 +104,7 @@ export default function HomePage() {
   }
 
   const StatusIndicator = () => {
-    if (uploadStatus === "uploading") {
+    if (uploadStatus === 'uploading') {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 gradient-primary text-primary-foreground px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
           <div className="animate-spin rounded-full h-5 w-5 border-2 border-primary-foreground border-t-transparent"></div>
@@ -113,7 +113,7 @@ export default function HomePage() {
       )
     }
 
-    if (uploadStatus === "success") {
+    if (uploadStatus === 'success') {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-emerald-500 text-white px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
           <CheckCircle className="h-5 w-5" />
@@ -122,7 +122,7 @@ export default function HomePage() {
       )
     }
 
-    if (uploadStatus === "error") {
+    if (uploadStatus === 'error') {
       return (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-destructive text-destructive-foreground px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
           <AlertCircle className="h-5 w-5" />
@@ -312,13 +312,12 @@ export default function HomePage() {
             <p className="text-muted-foreground text-lg text-pretty max-w-md mx-auto">{t.aiRecognitionSubtitle}</p>
           </div>
 
-
           <Card className="mb-10 gradient-card border-2 border-border elevation-2 transition-elevation hover:elevation-3 overflow-hidden rounded-2xl">
             <CardContent className="p-0">
               <div
                 className={`text-center p-10 transition-all duration-300 ${
-                  dragActive ? "bg-primary/10 border-primary/30 scale-[1.02]" : ""
-                } ${uploadStatus === "uploading" ? "opacity-50 pointer-events-none" : ""}`}
+                  dragActive ? 'bg-primary/10 border-primary/30 scale-[1.02]' : ''
+                } ${uploadStatus === 'uploading' ? 'opacity-50 pointer-events-none' : ''}`}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
@@ -332,10 +331,10 @@ export default function HomePage() {
 
                 <h3 className="text-2xl font-bold text-card-foreground mb-3">{t.uploadTitle}</h3>
                 <p className="text-muted-foreground mb-10 text-lg max-w-md mx-auto leading-relaxed">
-                  {t.uploadSubtitle.split("\n").map((line, index) => (
+                  {t.uploadSubtitle.split('\n').map((line, index) => (
                     <span key={index}>
                       {line}
-                      {index < t.uploadSubtitle.split("\n").length - 1 && <br />}
+                      {index < t.uploadSubtitle.split('\n').length - 1 && <br />}
                     </span>
                   ))}
                 </p>
@@ -343,17 +342,17 @@ export default function HomePage() {
                 <div className="flex flex-col gap-4 max-w-xs mx-auto">
                   <Button
                     onClick={openCamera}
-                    disabled={uploadStatus === "uploading"}
+                    disabled={uploadStatus === 'uploading'}
                     className="gradient-primary hover:opacity-90 text-primary-foreground h-14 text-lg font-semibold elevation-2 transition-elevation hover:elevation-3 rounded-xl"
                     size="lg"
                   >
                     <Camera className="mr-3 h-6 w-6" />
-                    {uploadStatus === "uploading" ? t.aiProcessing : t.takePhoto}
+                    {uploadStatus === 'uploading' ? t.aiProcessing : t.takePhoto}
                   </Button>
 
                   <Button
                     onClick={() => fileInputRef.current?.click()}
-                    disabled={uploadStatus === "uploading"}
+                    disabled={uploadStatus === 'uploading'}
                     variant="outline"
                     size="lg"
                     className="border-2 border-primary text-primary hover:bg-primary/5 h-14 text-lg font-medium transition-all duration-200 rounded-xl"
