@@ -59,6 +59,19 @@ export interface Translations {
   recognitionFailed: string
   loadingApp: string
 
+  // Upload error messages
+  errorDragImageFile: string
+  errorOnlyOneImage: string
+  errorFileEmpty: string
+  errorFileTooLarge: string
+  errorUnsupportedFormat: string
+  errorValidationFailed: string
+  errorBlobFileTooLarge: string
+  errorBlobContentTypeNotAllowed: string
+  errorBlobAccessDenied: string
+  errorUnauthorized: string
+  errorUploadFailed: string
+
   // Recognition result page
   recognitionResult: string
   originalImage: string
@@ -134,6 +147,18 @@ export const translations: Record<string, Translations> = {
     recognitionSuccess: '识别成功！正在跳转...',
     recognitionFailed: '识别失败，请重试',
     loadingApp: '正在加载应用...',
+
+    errorDragImageFile: '请拖拽图片文件',
+    errorOnlyOneImage: '一次只能上传一张图片',
+    errorFileEmpty: '文件为空，请选择有效的图片文件',
+    errorFileTooLarge: '文件大小超过 10MB，请选择更小的图片',
+    errorUnsupportedFormat: '支持格式：JPEG、PNG、WebP、HEIC、HEIF',
+    errorValidationFailed: '文件验证失败',
+    errorBlobFileTooLarge: '文件过大，请选择小于 10MB 的图片',
+    errorBlobContentTypeNotAllowed: '不支持的文件格式，请上传图片文件',
+    errorBlobAccessDenied: '权限不足，请联系管理员',
+    errorUnauthorized: '请先登录后再上传',
+    errorUploadFailed: '上传失败，请重试',
 
     recognitionResult: '识别结果',
     originalImage: '原图',
@@ -215,6 +240,18 @@ export const translations: Record<string, Translations> = {
     recognitionSuccess: 'Recognition successful! Redirecting...',
     recognitionFailed: 'Recognition failed, please try again',
     loadingApp: 'Loading application...',
+
+    errorDragImageFile: 'Please drag an image file',
+    errorOnlyOneImage: 'Only one image can be uploaded at a time',
+    errorFileEmpty: 'File is empty, please select a valid image file',
+    errorFileTooLarge: 'File size exceeds 10MB, please select a smaller image',
+    errorUnsupportedFormat: 'Supported formats: JPEG, PNG, WebP, HEIC, HEIF',
+    errorValidationFailed: 'File validation failed',
+    errorBlobFileTooLarge: 'File too large, please select an image under 10MB',
+    errorBlobContentTypeNotAllowed: 'Unsupported file format, please upload an image file',
+    errorBlobAccessDenied: 'Access denied, please contact administrator',
+    errorUnauthorized: 'Please login before uploading',
+    errorUploadFailed: 'Upload failed, please try again',
 
     recognitionResult: 'Recognition Result',
     originalImage: 'Original Image',

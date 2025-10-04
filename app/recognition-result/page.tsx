@@ -66,10 +66,14 @@ export default function RecognitionResultPage() {
     setCurrentLang(detectedLang)
     setT(getTranslations(detectedLang))
 
-    // 从 sessionStorage 获取上传的图片
-    const uploadedImage = sessionStorage.getItem('uploadedImage')
-    if (uploadedImage) {
-      setOriginalImage(uploadedImage)
+    // 从 sessionStorage 获取上传的图片（支持 Vercel Blob URL 或 base64）
+    const uploadedImageUrl = sessionStorage.getItem('uploadedImageUrl')
+    const uploadedImageBase64 = sessionStorage.getItem('uploadedImage')
+
+    const imageData = uploadedImageUrl ?? uploadedImageBase64
+
+    if (imageData) {
+      setOriginalImage(imageData)
       // 模拟AI识别过程
       simulateAIRecognition()
     } else {
@@ -95,6 +99,7 @@ export default function RecognitionResultPage() {
 
   const handleBack = () => {
     sessionStorage.removeItem('uploadedImage')
+    sessionStorage.removeItem('uploadedImageUrl')
     router.push('/')
   }
 
@@ -146,6 +151,7 @@ export default function RecognitionResultPage() {
 
       setTimeout(() => {
         sessionStorage.removeItem('uploadedImage')
+        sessionStorage.removeItem('uploadedImageUrl')
         router.push('/')
       }, 1500)
     }, 2000)
