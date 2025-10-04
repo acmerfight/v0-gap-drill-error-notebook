@@ -24,7 +24,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       onUploadCompleted: ({ blob }) => {
         // TODO: Add database logging if needed
         // eslint-disable-next-line no-console
-        console.log(blob.url)
+        console.log('finished uploaded image url:', blob.url)
         return Promise.resolve()
       },
     })
