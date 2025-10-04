@@ -1,6 +1,7 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client'
 import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
+import { UPLOAD_CONFIG } from '@/lib/constants'
 
 export async function POST(request: Request): Promise<NextResponse> {
   try {
@@ -16,8 +17,8 @@ export async function POST(request: Request): Promise<NextResponse> {
         }
 
         return {
-          allowedContentTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/heic', 'image/heif'],
-          maximumSizeInBytes: 10 * 1024 * 1024, // 10MB
+          allowedContentTypes: [...UPLOAD_CONFIG.ALLOWED_CONTENT_TYPES],
+          maximumSizeInBytes: UPLOAD_CONFIG.MAX_FILE_SIZE,
         }
       },
       onUploadCompleted: ({ blob }) => {
