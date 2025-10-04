@@ -26,10 +26,14 @@ import {
 import { useRouter } from 'next/navigation'
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/nextjs'
 import { detectLanguage, getTranslations, type Translations } from '@/lib/i18n'
+import { upload } from '@vercel/blob/client'
+import { BlobFileTooLargeError, BlobAccessError, BlobContentTypeNotAllowedError } from '@vercel/blob'
+import { UPLOAD_CONFIG } from '@/lib/constants'
 
 export default function HomePage() {
   const [dragActive, setDragActive] = useState(false)
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle')
+  const [uploadError, setUploadError] = useState<string>('')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
   const { isLoaded } = useUser()
@@ -58,32 +62,102 @@ export default function HomePage() {
     e.stopPropagation()
     setDragActive(false)
 
-    if (e.dataTransfer.files?.[0]) {
-      handleFiles(e.dataTransfer.files)
+    const { files } = e.dataTransfer
+    if (!files || files.length === 0) {
+      setUploadError(t.errorDragImageFile)
+      return
     }
+
+    if (files.length > 1) {
+      setUploadError(t.errorOnlyOneImage)
+      return
+    }
+
+    void handleFiles(files)
   }
 
-  const handleFiles = (files: FileList) => {
-    const file = files[0]
-    if (file) {
-      setUploadStatus('uploading')
-
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const imageData = e.target?.result as string
-        sessionStorage.setItem('uploadedImage', imageData)
-        setUploadStatus('success')
-
-        setTimeout(() => {
-          router.push('/recognition-result')
-        }, 800)
-      }
-      reader.onerror = () => {
-        setUploadStatus('error')
-        setTimeout(() => setUploadStatus('idle'), 3000)
-      }
-      reader.readAsDataURL(file)
+  // 文件验证函数
+  const validateFile = (file: File): { valid: boolean; error?: string } => {
+    if (file.size === 0) {
+      return { valid: false, error: t.errorFileEmpty }
     }
+
+    if (file.size > UPLOAD_CONFIG.MAX_FILE_SIZE) {
+      return { valid: false, error: t.errorFileTooLarge }
+    }
+
+    if (!UPLOAD_CONFIG.ALLOWED_CONTENT_TYPES.includes(file.type as (typeof UPLOAD_CONFIG.ALLOWED_CONTENT_TYPES)[number])) {
+      return { valid: false, error: t.errorUnsupportedFormat }
+    }
+
+    return { valid: true }
+  }
+
+  // 使用 Vercel Blob 上传文件
+  const handleFiles = async (files: FileList) => {
+    const file = files[0]
+    if (!file) {
+      return
+    }
+
+    setUploadError('')
+
+    // 验证文件
+    const validation = validateFile(file)
+    if (!validation.valid) {
+      setUploadStatus('error')
+      setUploadError(validation.error ?? t.errorValidationFailed)
+      setTimeout(() => {
+        setUploadStatus('idle')
+        setUploadError('')
+      }, 3000)
+      return
+    }
+
+    setUploadStatus('uploading')
+
+    // 上传到 Vercel Blob
+    let blob
+    try {
+      blob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
+      })
+    } catch (error: unknown) {
+      setUploadStatus('error')
+
+      // 使用类型检查处理具体错误
+      if (error instanceof BlobFileTooLargeError) {
+        setUploadError(t.errorBlobFileTooLarge)
+      } else if (error instanceof BlobContentTypeNotAllowedError) {
+        setUploadError(t.errorBlobContentTypeNotAllowed)
+      } else if (error instanceof BlobAccessError) {
+        setUploadError(t.errorBlobAccessDenied)
+      } else if (error instanceof Error) {
+        // 处理自定义错误（如 Unauthorized）
+        if (error.message === 'Unauthorized') {
+          setUploadError(t.errorUnauthorized)
+        } else {
+          setUploadError(error.message || t.errorUploadFailed)
+        }
+      } else {
+        setUploadError(t.errorUploadFailed)
+      }
+
+      setTimeout(() => {
+        setUploadStatus('idle')
+        setUploadError('')
+      }, 3000)
+      return
+    }
+
+    // 上传成功后的处理
+    sessionStorage.setItem('uploadedImageUrl', blob.url)
+    setUploadStatus('success')
+
+    setTimeout(() => {
+      router.push('/recognition-result')
+    }, 800)
   }
 
   const openCamera = () => {
@@ -98,9 +172,14 @@ export default function HomePage() {
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      handleFiles(e.target.files)
+    setUploadError('')
+
+    const files = e.target.files
+    if (!files || files.length === 0) {
+      return
     }
+
+    void handleFiles(files)
   }
 
   const StatusIndicator = () => {
@@ -124,9 +203,9 @@ export default function HomePage() {
 
     if (uploadStatus === 'error') {
       return (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-destructive text-destructive-foreground px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3">
-          <AlertCircle className="h-5 w-5" />
-          <span className="text-sm font-medium">{t.recognitionFailed}</span>
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-destructive text-destructive-foreground px-6 py-3 rounded-full shadow-lg elevation-3 flex items-center gap-3 max-w-md">
+          <AlertCircle className="h-5 w-5 flex-shrink-0" />
+          <span className="text-sm font-medium">{uploadError || t.recognitionFailed}</span>
         </div>
       )
     }
