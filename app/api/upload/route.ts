@@ -19,6 +19,7 @@ export async function POST(request: Request): Promise<NextResponse> {
         return {
           allowedContentTypes: [...UPLOAD_CONFIG.ALLOWED_CONTENT_TYPES],
           maximumSizeInBytes: UPLOAD_CONFIG.MAX_FILE_SIZE,
+          addRandomSuffix: true,
         }
       },
       onUploadCompleted: ({ blob }) => {
