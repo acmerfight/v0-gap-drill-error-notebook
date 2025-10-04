@@ -16,10 +16,16 @@ export async function POST(request: Request): Promise<NextResponse> {
           throw new Error('Unauthorized')
         }
 
+        // 优先使用自定义域名，回退到 VERCEL_URL，最后是 localhost
+        const baseUrl =
+          process.env.NEXT_PUBLIC_APP_URL ??
+          (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+
         return {
           allowedContentTypes: [...UPLOAD_CONFIG.ALLOWED_CONTENT_TYPES],
           maximumSizeInBytes: UPLOAD_CONFIG.MAX_FILE_SIZE,
           addRandomSuffix: true,
+          callbackUrl: `${baseUrl}/api/upload`,
         }
       },
       onUploadCompleted: ({ blob }) => {
