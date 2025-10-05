@@ -33,41 +33,16 @@ This project is based on **Vercel** and **GitHub** integrated architecture, adop
 
 ### 🐙 GitHub CLI Operations
 
-Use **GitHub CLI (`gh`)** for repository operations and workflows:
+Use **GitHub CLI (`gh`)** for all GitHub operations:
 
 ```bash
-# Repository Management
-gh repo view                    # View repository details
-gh repo sync                    # Sync forked repository with upstream
-
-# Pull Request Workflow
-gh pr create                    # Create a new pull request
-gh pr list                      # List pull requests
-gh pr view [number]             # View PR details
-gh pr checkout [number]         # Checkout PR locally
-gh pr review [number]           # Review a pull request
-gh pr merge [number]            # Merge a pull request
-
-# Issue Management
-gh issue create                 # Create a new issue
-gh issue list                   # List issues
-gh issue view [number]          # View issue details
-
-# Branch Operations
-gh pr create --base main --head feature-branch
-gh pr checks                    # View PR CI/CD status
-
-# Workflow & Actions
-gh run list                     # List workflow runs
-gh run view [run-id]            # View workflow run details
-gh run watch                    # Watch a workflow run in real-time
+gh pr create       # Create a Pull Request
+gh pr view         # View PR details and status
+gh pr checks       # Check PR CI/CD status
+gh pr merge        # Merge Pull Request (after all checks pass)
 ```
 
-**Best Practices**:
-
-- Always create PRs via `gh pr create` for consistency
-- Review PR checks before merging: `gh pr checks`
-- Use `gh pr view` to verify all checks pass before approval
+**Important**: Always verify all checks pass before merging (`gh pr checks`)
 
 ### 🛠️ Project Commands
 

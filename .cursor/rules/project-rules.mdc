@@ -35,13 +35,12 @@ Strictly follow the tech stack defined in `CLAUDE.md`:
 
 ### 🐙 GitHub CLI Workflow
 Use GitHub CLI (`gh`) for all GitHub operations:
-- Create PRs: `gh pr create`
-- View PR status: `gh pr view` and `gh pr checks`
-- Review PRs: `gh pr review [number]`
-- Merge PRs: `gh pr merge [number]` (after all checks pass)
-- Manage issues: `gh issue create`, `gh issue list`
+- `gh pr create` - Create a Pull Request
+- `gh pr view` - View PR details and status
+- `gh pr checks` - Check PR CI/CD status
+- `gh pr merge` - Merge Pull Request (after all checks pass)
 
-**Always verify PR checks pass before merging**: `gh pr checks`
+**Important**: Always verify all checks pass before merging (`gh pr checks`)
 
 ### 🧠 Core Principles (The Rule)
 - Errors should never pass silently
