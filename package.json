@@ -10,16 +10,15 @@
     "lint:fix": "eslint --fix .",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
-    "ci": "pnpm run ci:check",
-    "ci:check": "pnpm run lint && echo '✅ Lint passed' && pnpm run type-check && echo '✅ Type check passed' && pnpm run build && echo '✅ Build completed'",
-    "audit:fix": "pnpm audit --fix",
+    "ci": "pnpm run lint && echo '✅ Lint passed' && pnpm run type-check && echo '✅ Type check passed' && pnpm run build && echo '✅ Build completed'",
+    "audit": "pnpm audit --audit-level=high",
+    "audit:fix": "pnpm audit --fix --audit-level=high",
     "outdated": "pnpm outdated",
     "clean": "npx rimraf .next node_modules/.cache",
     "clean:deps": "npx rimraf node_modules pnpm-lock.yaml && pnpm install",
     "health": "pnpm run type-check && pnpm run lint:check && echo '✅ Project health OK'",
     "lint:check": "eslint --max-warnings 0 .",
-    "prepare": "husky",
-    "verify": "echo '🔍 验证代码质量...' && pnpm run type-check && echo '✅ TypeScript 检查通过' && pnpm run lint && echo '✅ ESLint 检查通过' && node scripts/check-env.js && echo '\\n✅ 所有验证通过！代码可以使用。'"
+    "prepare": "husky"
   },
   "engines": {
     "node": "22.x",

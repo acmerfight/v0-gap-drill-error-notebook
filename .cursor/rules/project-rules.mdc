@@ -1,0 +1,63 @@
+---
+description: Project Development Standards - Strictly follow all rules and principles in CLAUDE.md
+alwaysApply: true
+---
+
+# Project Development Standards
+
+**⚠️ Please read and strictly follow all rules and principles in `CLAUDE.md` documentation.**
+
+## Core Requirements
+
+### 📚 Documentation First
+- Any changes to project architecture, technology stack, or engineering practices must immediately update `CLAUDE.md` and this document
+- Documentation inconsistencies lead to reduced development efficiency and poor decision-making
+
+### 🛠️ Tech Stack Compliance
+Strictly follow the tech stack defined in `CLAUDE.md`:
+- Runtime: Next.js 15 + React 19 + TypeScript 5
+- Database: Neon PostgreSQL + Drizzle ORM
+- Validation: Zod
+- UI: Tailwind CSS 4 + Radix UI (shadcn/ui)
+- Linting: ESLint 9 + TypeScript ESLint + Prettier
+- Git Hooks: Husky + lint-staged
+
+### 🔒 Code Quality
+- 🚫 No `git commit --no-verify`
+- 📏 TypeScript strict mode for type safety
+- 🔍 Enforce ESLint security rules
+- 🪝 All commits must pass Husky + lint-staged checks
+
+### 🚫 Git Workflow
+- Strictly no direct push to main branch
+- All code must be submitted via Pull Request
+- No exceptions (including administrators)
+
+### 🐙 GitHub CLI Workflow
+Use GitHub CLI (`gh`) for all GitHub operations:
+- `gh pr create` - Create a Pull Request
+- `gh pr view` - View PR details and status
+- `gh pr checks` - Check PR CI/CD status
+- `gh pr merge` - Merge Pull Request (after all checks pass)
+
+**Important**: Always verify all checks pass before merging (`gh pr checks`)
+
+### 🧠 Core Principles (The Rule)
+- Errors should never pass silently
+- Types over runtime assumptions
+- Composition over inheritance
+- Explicit over implicit magic
+- In the face of ambiguity, refuse to guess
+- There should be one obvious way to do it
+- If the implementation is hard to explain, it's a bad idea
+
+## Development Commands
+
+Use pnpm to run project commands:
+- `pnpm dev` - Development mode
+- `pnpm build` - Build project
+- `pnpm ci` - Complete CI pipeline (must pass before commit)
+- `pnpm lint:fix` - Auto-fix code formatting
+- `pnpm type-check` - TypeScript type checking
+
+See `CLAUDE.md` for complete command list.
