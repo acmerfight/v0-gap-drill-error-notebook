@@ -2,6 +2,7 @@ import { handleUpload, type HandleUploadBody } from '@vercel/blob/client'
 import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { UPLOAD_CONFIG } from '@/lib/constants'
+import { createUpload } from '@/lib/internal-db'
 
 export async function POST(request: Request): Promise<NextResponse> {
   try {
@@ -28,10 +29,11 @@ export async function POST(request: Request): Promise<NextResponse> {
           callbackUrl: `${baseUrl}/api/upload`,
         }
       },
-      onUploadCompleted: ({ blob }) => {
+      onUploadCompleted: async ({ blob }) => {
         // TODO: Add database logging if needed
         // eslint-disable-next-line no-console
         console.log('finished uploaded image url:', blob.url)
+        await createUpload({ imageUrl: blob.url })
         return Promise.resolve()
       },
     })
