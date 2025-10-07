@@ -3,7 +3,6 @@ import {
   userUploads,
   aiProcessingResults,
   type UserUpload,
-  type NewUserUpload,
   type AiProcessingResult,
   type NewAiProcessingResult,
 } from '@/lib/schema'
@@ -26,14 +25,8 @@ async function getCurrentUserId(): Promise<string> {
 }
 
 // User Uploads CRUD Operations
-export async function createUpload(data: Omit<NewUserUpload, 'userId'> & { userId?: string }): Promise<UserUpload> {
-  // 使用提供的 userId 或通过 auth() 获取
-  const userId = data.userId ?? (await getCurrentUserId())
-
-  const [newUpload] = await db
-    .insert(userUploads)
-    .values({ ...data, userId })
-    .returning()
+export async function createUpload(data: { imageUrl: string; userId: string }): Promise<UserUpload> {
+  const [newUpload] = await db.insert(userUploads).values({ imageUrl: data.imageUrl, userId: data.userId }).returning()
 
   return newUpload
 }

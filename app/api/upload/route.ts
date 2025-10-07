@@ -1,4 +1,5 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client'
+import { del } from '@vercel/blob'
 import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import { UPLOAD_CONFIG } from '@/lib/constants'
@@ -35,14 +36,12 @@ export async function POST(request: Request): Promise<NextResponse> {
         try {
           // eslint-disable-next-line no-console
           console.log('finished uploaded image url:', blob.url)
-          // 使用捕获的 userId，避免在回调中再次调用 auth()
           await createUpload({ imageUrl: blob.url, userId })
           // eslint-disable-next-line no-console
           console.log('successfully saved to database')
         } catch (dbError) {
-          // 数据库保存失败不应该影响上传流程
-          // eslint-disable-next-line no-console
-          console.error('failed to save upload to database:', dbError)
+          await del(blob.url)
+          throw dbError
         }
       },
     })
