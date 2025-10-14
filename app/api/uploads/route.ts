@@ -9,7 +9,6 @@ import { z } from 'zod'
  */
 const UploadConfirmSchema = z.object({
   imageUrl: z
-    .string()
     .url('Invalid URL format')
     .regex(/^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/.+$/, 'URL must be from Vercel Blob Storage'),
 })
