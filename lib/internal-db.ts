@@ -26,8 +26,13 @@ async function getCurrentUserId(): Promise<string> {
 }
 
 // User Uploads CRUD Operations
-export async function createUpload(data: Omit<NewUserUpload, 'userId'>): Promise<UserUpload> {
-  const userId = await getCurrentUserId()
+/**
+ * 创建上传记录
+ * @param data - 上传数据，可选提供 userId（用于回调场景）
+ */
+export async function createUpload(data: Omit<NewUserUpload, 'userId'> & { userId?: string }): Promise<UserUpload> {
+  // 如果没有提供 userId，则从当前会话获取
+  const userId = data.userId ?? (await getCurrentUserId())
 
   const [newUpload] = await db
     .insert(userUploads)
