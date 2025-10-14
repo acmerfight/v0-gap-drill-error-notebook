@@ -84,21 +84,9 @@ export async function POST(request: Request): Promise<NextResponse> {
       userId,
       error: dbError instanceof Error ? dbError.message : String(dbError),
     })
-
-    // 尝试清理已上传的 blob
-    try {
-      await del(imageUrl)
-      // eslint-disable-next-line no-console
-      console.log('✅ Blob cleanup successful:', { imageUrl })
-    } catch (delError) {
-      // 清理失败不应阻止错误响应，但需要记录
-      // eslint-disable-next-line no-console
-      console.error('⚠️  Blob cleanup failed (manual cleanup may be required):', {
-        imageUrl,
-        error: delError instanceof Error ? delError.message : String(delError),
-      })
-    }
-
+    await del(imageUrl)
+    // eslint-disable-next-line no-console
+    console.log('✅ Blob cleanup successful:', { imageUrl })
     // 抛出原始错误以便统一处理
     throw dbError
   }
