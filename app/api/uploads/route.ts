@@ -56,14 +56,6 @@ export async function POST(request: Request): Promise<NextResponse> {
       imageUrl,
     })
 
-    // eslint-disable-next-line no-console
-    console.log('✅ Upload saved to database:', {
-      uploadId: upload.id,
-      userId,
-      imageUrl,
-      createdAt: upload.createdAt,
-    })
-
     return NextResponse.json(
       {
         success: true,
