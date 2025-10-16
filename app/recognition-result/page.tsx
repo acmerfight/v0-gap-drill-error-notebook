@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Edit3, Check, X, Save, BookOpen, Eye, FileText, CheckCircle, AlertTriangle } from 'lucide-react'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { detectLanguage, getTranslations, type Translations } from '@/lib/i18n'
 
 interface RecognitionData {
@@ -57,7 +57,6 @@ export default function RecognitionResultPage() {
   const [previewSolution, setPreviewSolution] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle')
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   const [, setCurrentLang] = useState<'zh' | 'en'>('zh')
   const [t, setT] = useState<Translations>(getTranslations('zh'))
@@ -67,18 +66,18 @@ export default function RecognitionResultPage() {
     setCurrentLang(detectedLang)
     setT(getTranslations(detectedLang))
 
-    // 从 URL 参数获取上传的图片（Vercel Blob URL）
-    const uploadedImageUrl = searchParams.get('imageUrl')
+    // 从 sessionStorage 获取上传的图片（Vercel Blob URL）
+    const uploadedImageUrl = sessionStorage.getItem('uploadedImageUrl')
 
     if (uploadedImageUrl) {
-      setOriginalImage(decodeURIComponent(uploadedImageUrl))
+      setOriginalImage(uploadedImageUrl)
       // 模拟AI识别过程
       simulateAIRecognition()
     } else {
       // 如果没有图片数据，返回首页
       router.push('/')
     }
-  }, [router, searchParams])
+  }, [router])
 
   const simulateAIRecognition = () => {
     // 模拟AI识别延迟
@@ -96,6 +95,7 @@ export default function RecognitionResultPage() {
   }
 
   const handleBack = () => {
+    sessionStorage.removeItem('uploadedImageUrl')
     router.push('/')
   }
 
@@ -146,6 +146,7 @@ export default function RecognitionResultPage() {
       setSaveStatus('success')
 
       setTimeout(() => {
+        sessionStorage.removeItem('uploadedImageUrl')
         router.push('/')
       }, 1500)
     }, 2000)
