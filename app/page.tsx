@@ -178,12 +178,13 @@ export default function HomePage() {
       return
     }
 
-    // 保存成功后的处理
-    sessionStorage.setItem('uploadedImageUrl', blob.url)
+    // 保存成功后的处理 - 通过 URL 参数传递图片 URL
     setUploadStatus('success')
 
     setTimeout(() => {
-      router.push('/recognition-result')
+      // 使用 URL 参数传递图片 URL，避免 sessionStorage 不可靠的问题
+      const imageUrl = encodeURIComponent(blob.url)
+      router.push(`/recognition-result?imageUrl=${imageUrl}`)
     }, 800)
   }
 
