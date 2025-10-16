@@ -1,74 +1,114 @@
-### 🚀 技术栈
+## 🚨 Core Principle: Documentation-Project Synchronization
+
+**Any changes to project architecture, technology stack, or engineering practices must be immediately reflected in this document and related documentation.**
+
+Documentation inconsistencies lead to reduced development efficiency and poor decision-making. Maintaining documentation accuracy is every contributor's responsibility.
+
+---
+
+### 🚀 Tech Stack
 
 ```
 Runtime:     Next.js 15 + React 19 + TypeScript 5
 UI:          Tailwind CSS 4 + Radix UI + Lucide Icons
 Auth:        Clerk Authentication
+Database:    Neon PostgreSQL + Drizzle ORM
 Deploy:      Vercel (Node.js 22 target)
 Analytics:   Vercel Analytics
-Linting:     ESLint 9 + TypeScript ESLint
+Storage:     Vercel Blob
+Validation:  Zod
+Linting:     ESLint 9 + TypeScript ESLint + Prettier
+Git Hooks:   Husky + lint-staged
 Package:     pnpm (>=8.0.0, recommended: 10.15.1)
-Storage:     neon, 可使用 Neon CLI
 ```
 
-### 🌐 部署与环境
+### 🌐 Deployment & Environment
 
-本项目基于 **Vercel** 和 **GitHub** 集成架构，采用现代化的云原生部署方案：
+This project is based on **Vercel** and **GitHub** integrated architecture, adopting a modern cloud-native deployment approach:
 
-- 🔗 **集成方案**: GitHub + Vercel + Neon 三方集成
-- 🔧 **环境变量管理**: 所有环境变量均通过 Vercel 平台统一管理，无需本地配置
-- 📊 **项目信息获取**: 可通过 `vercel`, `gh`, `neon` CLI 工具获取项目状态和配置信息
-- ⚠️ **重要提醒**: 请勿手动设置环境变量或通过其他方式获取配置，统一使用 Vercel 平台管理
+- 🔗 **Integration**: GitHub + Vercel + Neon three-way integration
+- 🔧 **Environment Variables**: All environment variables are managed through Vercel platform, no local configuration needed
+- 📊 **Project Information**: Use `vercel`, `gh`, `neon` CLI tools to retrieve project status and configuration
+- ⚠️ **Important**: Do not manually set environment variables or retrieve configuration through other means, use Vercel platform exclusively
 
-### 🛠️ 项目命令
+### 🐙 GitHub CLI Operations
 
-使用 **pnpm** 运行项目命令，详见 `package.json` 中的 `scripts` 字段
-
-常用命令：
+Use **GitHub CLI (`gh`)** for all GitHub operations:
 
 ```bash
-pnpm dev          # 开发模式
-pnpm build        # 构建项目
-pnpm ci           # CI检查 (lint + type-check + build)
-pnpm lint:fix     # 修复代码格式
-pnpm type-check   # TypeScript类型检查
+gh pr create       # Create a Pull Request
+gh pr view         # View PR details and status
+gh pr checks       # Check PR CI/CD status
+gh pr merge        # Merge Pull Request (after all checks pass)
 ```
 
-### 🔒 代码质量与安全
+**Important**: Always verify all checks pass before merging (`gh pr checks`)
 
-**严格执行代码质量标准**：
+### 🛠️ Project Commands
 
-- 🚫 **禁止绕过检查**: `git commit --no-verify` 被严格禁止
-- 🔍 **ESLint 安全规则**: 强制执行安全和异步安全规则
-- 📏 **TypeScript 严格模式**: 确保类型安全
+Use **pnpm** to run project commands, see `scripts` field in `package.json` for details
 
-**Git 工作流规范**：
+Common commands:
 
-- 🚫 **严格禁止直接 push main**: 所有代码必须使用 Pull Request 方式提交
-- 🛡️ **无例外原则**: 包括管理员在内的所有开发者必须遵守此规范
+```bash
+# Development
+pnpm dev          # Development mode
+pnpm build        # Build project
+pnpm start        # Production mode
 
-### 🧠 核心原则 (The Rule)
+# Code Quality
+pnpm lint:fix     # Auto-fix ESLint + Prettier formatting issues
+pnpm lint:check   # Check code format (no auto-fix, CI mode)
+pnpm type-check   # TypeScript type checking
+
+# CI/CD
+pnpm ci           # Complete CI pipeline (lint + type-check + build)
+pnpm health       # Project health check (type-check + lint:check)
+
+# Maintenance
+pnpm clean        # Clean build cache
+pnpm clean:deps   # Clean dependencies and reinstall
+```
+
+### 🔒 Code Quality & Security
+
+**Strict code quality standards**:
+
+- 🚫 **No bypassing checks**: `git commit --no-verify` is strictly prohibited
+- 🔍 **ESLint security rules**: Enforce security and async safety rules
+- 📏 **TypeScript strict mode**: Ensure type safety
+- 🪝 **Pre-commit hooks**: Husky + lint-staged automatically runs ESLint, TypeScript compilation, and Prettier checks
+
+**Git workflow standards**:
+
+- 🚫 **Strictly no direct push to main**: All code must be submitted via Pull Request
+- 🛡️ **No exceptions**: All developers including administrators must follow this standard
+
+### 🧠 Core Principles (The Rule)
 
 ```
-错误应该显式处理，永远不要静默忽略 - Errors should never pass silently
-类型安全胜于运行时猜测 - Types over runtime assumptions
-组合优于继承 - Composition over inheritance
-显式声明胜于魔法推导 - Explicit over implicit magic
-面对歧义时，拒绝猜测的诱惑 - In the face of ambiguity, refuse to guess
-应该有一种明显的方式来做一件事 - There should be one obvious way to do it
-如果实现很难解释，那就是个坏想法 - If the implementation is hard to explain, it's a bad idea
+Errors should never pass silently
+Types over runtime assumptions
+Composition over inheritance
+Explicit over implicit magic
+In the face of ambiguity, refuse to guess
+There should be one obvious way to do it
+If the implementation is hard to explain, it's a bad idea
 ```
 
-### 📁 项目结构
-
-**⚠️ 重要：任何项目结构变更都必须同步更新此文档**
+### 📁 Project Structure
 
 ```
-/app                 # Next.js 13+ App Router 页面和布局
-/components          # React 组件
-  /ui               # 可复用基础 UI 组件
-/lib                # 工具函数、配置和通用逻辑
-/types              # TypeScript 类型定义
-/styles             # 全局样式文件
-/public             # 静态资源
+/app                 # Next.js 15 App Router pages and layouts
+  /api              # API routes
+/components          # React components
+  /ui               # Reusable base UI components (shadcn/ui)
+/lib                # Utility functions, configuration and common logic
+  schema.ts         # Drizzle ORM database schema
+  db.ts             # Database connection configuration
+/types              # TypeScript type definitions
+/styles             # Global style files
+/public             # Static assets
+middleware.ts       # Next.js middleware (auth, i18n, etc.)
+drizzle.config.ts   # Drizzle ORM configuration
 ```
