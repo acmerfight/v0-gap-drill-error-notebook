@@ -51,9 +51,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   // 3. 保存到数据库
   try {
-    const upload = await createUpload({
-      imageUrl,
-    })
+    const upload = await createUpload(imageUrl)
 
     return NextResponse.json(
       {

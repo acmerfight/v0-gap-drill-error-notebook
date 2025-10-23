@@ -3,7 +3,6 @@ import {
   userUploads,
   aiProcessingResults,
   type UserUpload,
-  type NewUserUpload,
   type AiProcessingResult,
   type NewAiProcessingResult,
 } from '@/lib/schema'
@@ -28,16 +27,13 @@ async function getCurrentUserId(): Promise<string> {
 // User Uploads CRUD Operations
 /**
  * 创建上传记录
- * @param data - 上传数据（不包含 userId，userId 会从当前会话自动获取）
+ * @param imageUrl - 图片 URL（userId 会从当前会话自动获取）
  */
-export async function createUpload(data: Omit<NewUserUpload, 'userId'>): Promise<UserUpload> {
+export async function createUpload(imageUrl: string): Promise<UserUpload> {
   // 强制从当前会话获取 userId，确保安全性
   const userId = await getCurrentUserId()
 
-  const [newUpload] = await db
-    .insert(userUploads)
-    .values({ ...data, userId })
-    .returning()
+  const [newUpload] = await db.insert(userUploads).values({ imageUrl, userId }).returning()
 
   return newUpload
 }
