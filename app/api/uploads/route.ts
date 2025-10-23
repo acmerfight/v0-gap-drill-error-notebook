@@ -17,17 +17,9 @@ const UploadConfirmSchema = z.object({
  * POST /api/uploads
  *
  * 保存上传链接到数据库
- *
- * 业界最佳实践：前端直传后主动通知后端保存链接
- * 流程：
- * 1. 前端获取上传令牌（POST /api/upload）
- * 2. 前端直接上传到 Vercel Blob
- * 3. 上传成功后，前端调用此 API 保存链接
- *
  * @returns {Object} { success: true, upload: { id, imageUrl, userId, createdAt } }
  */
 export async function POST(request: Request): Promise<NextResponse> {
-  // 1. 身份验证
   const { userId } = await auth()
   if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -41,7 +33,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json(
       {
         error: 'Validation failed',
-        details: validationResult.error.format(),
+        details: z.treeifyError(validationResult.error),
       },
       { status: 400 },
     )
@@ -66,17 +58,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       { status: 201 },
     )
   } catch (dbError) {
-    // 4. 数据库保存失败时的资源清理
-    // eslint-disable-next-line no-console
-    console.error('❌ Database save failed, initiating blob cleanup:', {
-      imageUrl,
-      userId,
-      error: dbError instanceof Error ? dbError.message : String(dbError),
-    })
     await del(imageUrl)
-    // eslint-disable-next-line no-console
-    console.log('✅ Blob cleanup successful:', { imageUrl })
-    // 抛出原始错误以便统一处理
     throw dbError
   }
 }

@@ -8,7 +8,7 @@ export const createUploadSchema = z.object({
 export const updateUploadSchema = createUploadSchema.partial()
 
 export const createAiResultSchema = z.object({
-  id: z.string().uuid('Invalid upload ID'),
+  id: z.uuid('Invalid upload ID'),
   aiQuestion: z.string().min(1, 'AI question is required').max(10000, 'Question too long'),
   aiSolution: z.string().min(1, 'AI solution is required').max(50000, 'Solution too long'),
 })
