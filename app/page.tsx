@@ -151,7 +151,34 @@ export default function HomePage() {
       return
     }
 
-    // 上传成功后的处理
+    // 保存上传记录到数据库
+    const response = await fetch('/api/uploads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        imageUrl: blob.url,
+      }),
+    })
+
+    if (!response.ok) {
+      const errorData: unknown = await response.json()
+      // eslint-disable-next-line no-console
+      console.error('保存上传记录失败:', errorData)
+
+      // 数据库保存失败，后端已自动清理 Blob
+      setUploadStatus('error')
+      setUploadError(t.errorUploadFailed)
+
+      setTimeout(() => {
+        setUploadStatus('idle')
+        setUploadError('')
+      }, 3000)
+      return
+    }
+
+    // 保存成功后的处理
     sessionStorage.setItem('uploadedImageUrl', blob.url)
     setUploadStatus('success')
 
