@@ -250,7 +250,6 @@ export async function updateErrorLibraryEntry(
 
 /**
  * 删除错题库记录
- * @throws Error 如果记录不存在或无权访问
  */
 export async function deleteErrorLibraryEntry(id: string): Promise<void> {
   const userId = await getCurrentUserId()
