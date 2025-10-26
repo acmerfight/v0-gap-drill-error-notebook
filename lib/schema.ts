@@ -19,19 +19,21 @@ export const aiProcessingResults = pgTable('ai_processing_results', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
-export const errorLibrary = pgTable('error_library', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: varchar('user_id', { length: 255 }).notNull(),
-  uploadId: uuid('upload_id')
-    .notNull()
-    .references(() => userUploads.id, { onDelete: 'cascade' }),
-  question: text('question').notNull(),
-  solution: text('solution').notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-})
-
-export const errorLibraryUserIdIdx = index('idx_error_library_user_id').on(errorLibrary.userId)
+export const errorLibrary = pgTable(
+  'error_library',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userId: varchar('user_id', { length: 255 }).notNull(),
+    uploadId: uuid('upload_id')
+      .notNull()
+      .references(() => userUploads.id, { onDelete: 'cascade' }),
+    question: text('question').notNull(),
+    solution: text('solution').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (table) => [index('idx_error_library_user_id').on(table.userId)],
+)
 
 export const userUploadsRelations = relations(userUploads, ({ one, many }) => ({
   aiProcessingResult: one(aiProcessingResults, {
