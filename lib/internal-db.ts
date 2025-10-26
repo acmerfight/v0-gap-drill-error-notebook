@@ -255,14 +255,10 @@ export async function updateErrorLibraryEntry(
 export async function deleteErrorLibraryEntry(id: string): Promise<void> {
   const userId = await getCurrentUserId()
 
-  const [deletedEntry] = await db
+  await db
     .delete(errorLibrary)
     .where(and(eq(errorLibrary.id, id), eq(errorLibrary.userId, userId)))
     .returning()
-
-  if (!deletedEntry) {
-    throw new Error('Error library entry not found or access denied')
-  }
 }
 
 /**
