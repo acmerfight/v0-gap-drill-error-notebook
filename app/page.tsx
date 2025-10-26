@@ -9,8 +9,6 @@ import {
   Upload,
   Zap,
   BookOpen,
-  History,
-  BarChart3,
   User,
   Bell,
   CheckCircle,
@@ -252,7 +250,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background">
       <StatusIndicator />
 
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80 border-b border-border elevation-2">
@@ -512,42 +510,6 @@ export default function HomePage() {
           </div>
         </SignedIn>
       </main>
-
-      <nav className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80 border-t border-border elevation-4 safe-area-pb">
-        <div className="flex justify-around items-center py-4 px-2">
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center gap-2 text-primary min-w-0 px-4 py-3 h-auto rounded-xl"
-          >
-            <BookOpen className="h-6 w-6" />
-            <span className="text-xs font-semibold">{t.home}</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground min-w-0 px-4 py-3 h-auto transition-colors rounded-xl hover:bg-primary/5"
-          >
-            <History className="h-6 w-6" />
-            <span className="text-xs font-medium">{t.history}</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground min-w-0 px-4 py-3 h-auto transition-colors rounded-xl hover:bg-primary/5"
-          >
-            <BarChart3 className="h-6 w-6" />
-            <span className="text-xs font-medium">{t.analysis}</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            className="flex flex-col items-center gap-2 text-muted-foreground hover:text-foreground min-w-0 px-4 py-3 h-auto transition-colors rounded-xl hover:bg-primary/5"
-          >
-            <User className="h-6 w-6" />
-            <span className="text-xs font-medium">{t.profile}</span>
-          </Button>
-        </div>
-      </nav>
     </div>
   )
 }
